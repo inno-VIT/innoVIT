@@ -34,8 +34,8 @@ const io = require('socket.io')(httpServer, {
   cors: {
     origin: function (origin, callback) {
       const allowedOrigins = [
-        'https://innovit-0qxd.onrender.com',
-        // 'https://innovit-4naq.onrender.com',
+        'https://innovit-0qxd.onrender.com', //   innoVIT current Frontend deployed on Render
+        'https://innovit-backend.onrender.com', // innoVIT current backend deployed on Render
         'http://localhost:5173',
         'http://localhost:3000',
         'http://localhost:5000',
@@ -83,7 +83,8 @@ const corsOptions = {
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+  // allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'x-access-token'],
+  allowedHeaders: ['*']
 }
 
 app.use(cors(corsOptions))

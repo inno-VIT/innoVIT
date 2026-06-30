@@ -1,55 +1,15 @@
-// <--------- Enhanced Version ----------->
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
-import axios from 'axios'
+import { useAuth } from '../utils/AuthContext'
 import Loading from './unicollab/components/Loading'
 
 const Protected = ({ children, fallback = null }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const { isAuthenticated, loading } = useAuth()
   const location = useLocation()
 
-  useEffect(() => {
-    const validateToken = async () => {
-      try {
-        setError(null)
-        const response = await axios.get(
-          'https://innovit-server.onrender.com/api/auth/validate-token',
-          {
-            withCredentials: true,
-            timeout: 10000, // 10 second timeout
-          },
-        )
-
-        if (response.data.valid) {
-          setIsAuthenticated(true)
-        } else {
-          setIsAuthenticated(false)
-          setError('Session expired. Please log in again.')
-        }
-      } catch (error) {
-        console.error('Token validation error:', error)
-        setIsAuthenticated(false)
-
-        if (error.code === 'ECONNABORTED') {
-          setError('Connection timeout. Please check your internet connection.')
-        } else if (error.response?.status === 401) {
-          setError('Session expired. Please log in again.')
-        } else {
-          setError('Authentication failed. Please try again.')
-        }
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    validateToken()
-  }, [])
-
-  // Show loading state
+  // Show loading while AuthContext validates the token
   if (loading) {
-    return <Loading message='Verifying authentication...' />
+    return <Loading message="Verifying authentication..." />
   }
 
   // Show custom fallback if provided
@@ -57,16 +17,94 @@ const Protected = ({ children, fallback = null }) => {
     return fallback
   }
 
-  // Redirect to login if not authenticated
+  // Redirect unauthenticated users to login
   if (!isAuthenticated) {
-    return <Navigate to='/login' replace state={{ from: location, error }} />
+    return (
+      <Navigate
+        to="/login"
+        replace
+        state={{
+          from: location,
+          error: 'Please login to continue.',
+        }}
+      />
+    )
   }
 
-  // Render protected content
+  // User authenticated
   return children
 }
 
 export default Protected
+// <--------- Enhanced Version ----------->
+// import React, { useState, useEffect } from 'react'
+// import { Navigate, useLocation } from 'react-router-dom'
+// import axios from 'axios'
+// import Loading from './unicollab/components/Loading'
+
+// const Protected = ({ children, fallback = null }) => {
+//   const [isAuthenticated, setIsAuthenticated] = useState(false)
+//   const [loading, setLoading] = useState(true)
+//   const [error, setError] = useState(null)
+//   const location = useLocation()
+
+//   useEffect(() => {
+//     const validateToken = async () => {
+//       try {
+//         setError(null)
+//         const response = await axios.get(
+//           'https://innovit-backend.onrender.com/api/auth/validate-token',
+//           {
+//             withCredentials: true,
+//             timeout: 10000, // 10 second timeout
+//           },
+//         )
+
+//         if (response.data.valid) {
+//           setIsAuthenticated(true)
+//         } else {
+//           setIsAuthenticated(false)
+//           setError('Session expired. Please log in again.')
+//         }
+//       } catch (error) {
+//         console.error('Token validation error:', error)
+//         setIsAuthenticated(false)
+
+//         if (error.code === 'ECONNABORTED') {
+//           setError('Connection timeout. Please check your internet connection.')
+//         } else if (error.response?.status === 401) {
+//           setError('Session expired. Please log in again.')
+//         } else {
+//           setError('Authentication failed. Please try again.')
+//         }
+//       } finally {
+//         setLoading(false)
+//       }
+//     }
+
+//     validateToken()
+//   }, [])
+
+//   // Show loading state
+//   if (loading) {
+//     return <Loading message='Verifying authentication...' />
+//   }
+
+//   // Show custom fallback if provided
+//   if (fallback && !isAuthenticated) {
+//     return fallback
+//   }
+
+//   // Redirect to login if not authenticated
+//   if (!isAuthenticated) {
+//     return <Navigate to='/login' replace state={{ from: location, error }} />
+//   }
+
+//   // Render protected content
+//   return children
+// }
+
+// export default Protected
 
 // import { useNavigate } from "react-router-dom";
 // import React, { useState, useEffect } from "react";

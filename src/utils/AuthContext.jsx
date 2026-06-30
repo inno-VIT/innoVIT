@@ -31,10 +31,16 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [loading, setLoading] = useState(true)
 
+  // const API_URL =
+  //   import.meta.env.MODE === 'development'
+  //     ? 'http://localhost:5000'
+  //     : 'https://innovit-backend.onrender.com'
+
   const API_URL =
-    import.meta.env.MODE === 'development'
-      ? 'http://localhost:5000'
-      : 'https://innovit-backend.onrender.com'
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.MODE === 'development'
+    ? 'http://localhost:5000'
+    : 'https://innovit-backend.onrender.com')
 
   const login = (token, userData) => {
     setToken(token)
