@@ -1,95 +1,99 @@
-import React, { useState } from 'react';
-import { Button } from '../ui/Button';
-import { Textarea } from '../ui/TextArea';
+import React, { useState } from 'react'
+import { Button } from '../../ui/Button'
+import { Textarea } from '../../ui/TextArea'
 
 const ContentUpdateEditor = ({
   originalContent,
   handleSubmit,
   validate,
   onCancel,
-  placeholder = "Update your content...",
-  className = "",
+  placeholder = 'Update your content...',
+  className = '',
   maxLength = 10000,
-  showCharacterCount = true
+  showCharacterCount = true,
 }) => {
-  const [content, setContent] = useState(originalContent);
-  const [error, setError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [content, setContent] = useState(originalContent)
+  const [error, setError] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleChange = (e) => {
-    setContent(e.target.value);
-    if (error) setError('');
-  };
+  const handleChange = e => {
+    setContent(e.target.value)
+    if (error) setError('')
+  }
 
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  const handleFormSubmit = async e => {
+    e.preventDefault()
+    setIsSubmitting(true)
 
-    let error = null;
+    let error = null
 
     if (validate) {
-      error = validate(content);
+      error = validate(content)
     }
 
     if (error && error.length !== 0) {
-      setError(error);
-      setIsSubmitting(false);
+      setError(error)
+      setIsSubmitting(false)
     } else {
       try {
-        await handleSubmit(e, content);
+        await handleSubmit(e, content)
       } catch (err) {
-        setError('Failed to update content');
+        setError('Failed to update content')
       } finally {
-        setIsSubmitting(false);
+        setIsSubmitting(false)
       }
     }
-  };
+  }
 
   const handleCancel = () => {
-    setContent(originalContent);
-    setError('');
+    setContent(originalContent)
+    setError('')
     if (onCancel) {
-      onCancel();
+      onCancel()
     }
-  };
+  }
 
-  const isAtLimit = content.length >= maxLength;
-  const hasChanges = content.trim() !== originalContent.trim();
+  const isAtLimit = content.length >= maxLength
+  const hasChanges = content.trim() !== originalContent.trim()
 
   return (
     <form onSubmit={handleFormSubmit} className={`space-y-3 ${className}`}>
       <div>
         <Textarea
           value={content}
-          name="content"
+          name='content'
           onChange={handleChange}
           placeholder={placeholder}
           className={`min-h-[120px] resize-none ${
-            error ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''
+            error
+              ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
+              : ''
           } ${isAtLimit ? 'border-orange-300' : ''}`}
           disabled={isSubmitting}
         />
 
-        <div className="flex justify-between items-center mt-1">
+        <div className='flex justify-between items-center mt-1'>
           {error && (
-            <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+            <p className='text-sm text-red-600 dark:text-red-400'>{error}</p>
           )}
 
           {showCharacterCount && (
-            <div className={`text-xs ml-auto ${
-              isAtLimit ? 'text-orange-600' : 'text-gray-500'
-            }`}>
+            <div
+              className={`text-xs ml-auto ${
+                isAtLimit ? 'text-orange-600' : 'text-gray-500'
+              }`}
+            >
               {content.length}/{maxLength}
             </div>
           )}
         </div>
       </div>
 
-      <div className="flex gap-2 justify-end">
+      <div className='flex gap-2 justify-end'>
         {onCancel && (
           <Button
-            type="button"
-            variant="outline"
+            type='button'
+            variant='outline'
             onClick={handleCancel}
             disabled={isSubmitting}
           >
@@ -97,14 +101,14 @@ const ContentUpdateEditor = ({
           </Button>
         )}
         <Button
-          type="submit"
+          type='submit'
           disabled={isSubmitting || !hasChanges || isAtLimit}
         >
           {isSubmitting ? 'Updating...' : 'Update'}
         </Button>
       </div>
     </form>
-  );
-};
+  )
+}
 
-export default ContentUpdateEditor;
+export default ContentUpdateEditor

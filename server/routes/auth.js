@@ -1,8 +1,166 @@
-const express = require("express")
+// const jwt = require('jsonwebtoken')
+// const User = require('../models/Users')
+
+// // Main authentication middleware for UniCollab social features
+// const verifyToken = async (req, res, next) => {
+//   try {
+//     // Support both Authorization header and x-access-token header
+//     let token = req.headers['x-access-token']
+
+//     if (
+//       !token &&
+//       req.headers.authorization &&
+//       req.headers.authorization.startsWith('Bearer ')
+//     ) {
+//       token = req.headers.authorization.split(' ')[1]
+//     }
+
+//     if (!token) {
+//       return res.status(401).json({
+//         success: false,
+//         message: 'Access token required',
+//       })
+//     }
+
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET)
+
+//     // Get full user data from database
+//     const user = await User.findById(decoded.userId).select('-password')
+
+//     if (!user) {
+//       return res.status(401).json({
+//         success: false,
+//         message: 'User not found',
+//       })
+//     }
+
+//     // Attach user to request object (matching your existing pattern)
+//     req.user = {
+//       id: user._id,
+//       userId: user._id, // For compatibility with social media code
+//       username: user.username,
+//       email: user.email,
+//       firstName: user.firstName,
+//       lastName: user.lastName,
+//       isAdmin: user.isAdmin || false,
+//     }
+
+//     return next()
+//   } catch (err) {
+//     console.error('Auth middleware error:', err)
+
+//     if (err.name === 'JsonWebTokenError') {
+//       return res.status(401).json({
+//         success: false,
+//         message: 'Invalid token',
+//       })
+//     }
+
+//     if (err.name === 'TokenExpiredError') {
+//       return res.status(401).json({
+//         success: false,
+//         message: 'Token expired',
+//       })
+//     }
+
+//     return res.status(500).json({
+//       success: false,
+//       message: 'Authentication failed',
+//     })
+//   }
+// }
+
+// // Optional authentication middleware for public routes that can have enhanced features for logged-in users
+// const optionallyVerifyToken = async (req, res, next) => {
+//   try {
+//     // Support both Authorization header and x-access-token header
+//     let token = req.headers['x-access-token']
+
+//     if (
+//       !token &&
+//       req.headers.authorization &&
+//       req.headers.authorization.startsWith('Bearer ')
+//     ) {
+//       token = req.headers.authorization.split(' ')[1]
+//     }
+
+//     if (!token) {
+//       return next()
+//     }
+
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET)
+
+//     // Get user data from database
+//     const user = await User.findById(decoded.userId).select('-password')
+
+//     if (user) {
+//       req.user = {
+//         id: user._id,
+//         userId: user._id,
+//         username: user.username,
+//         email: user.email,
+//         firstName: user.firstName,
+//         lastName: user.lastName,
+//         isAdmin: user.isAdmin || false,
+//       }
+//     }
+
+//     next()
+//   } catch (err) {
+//     // For optional auth, just continue without user data if token is invalid
+//     console.log('Optional auth failed, continuing without user:', err.message)
+//     next()
+//   }
+// }
+
+// // Admin-only middleware for UniCollab admin features
+// const requireAdmin = (req, res, next) => {
+//   if (!req.user || !req.user.isAdmin) {
+//     return res.status(403).json({
+//       success: false,
+//       message: 'Admin access required',
+//     })
+//   }
+//   next()
+// }
+
+// // Middleware to check if user owns the resource or is admin
+// const requireOwnershipOrAdmin = resourceUserId => {
+//   return (req, res, next) => {
+//     if (!req.user) {
+//       return res.status(401).json({
+//         success: false,
+//         message: 'Authentication required',
+//       })
+//     }
+
+//     const resourceId = resourceUserId
+//     const currentUserId = req.user.id
+
+//     if (currentUserId !== resourceId && !req.user.isAdmin) {
+//       return res.status(403).json({
+//         success: false,
+//         message: 'Not authorized to access this resource',
+//       })
+//     }
+
+//     next()
+//   }
+// }
+
+// module.exports = {
+//   verifyToken,
+//   optionallyVerifyToken,
+//   requireAdmin,
+//   requireOwnershipOrAdmin,
+// }
+
+// <-------- THis code works perfectly fine ---------- >
+const express = require('express')
 const router = express.Router()
-const User = require("../models/Users")
-const jwt = require("jsonwebtoken")
-const bcrypt = require("bcryptjs")
+const User = require('../models/Users')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
 
 // Input validation middleware
 const validateSignup = (req, res, next) => {
@@ -11,14 +169,14 @@ const validateSignup = (req, res, next) => {
   if (!firstName || !lastName || !username || !email || !password) {
     return res.status(400).json({
       success: false,
-      message: "All fields are required."
+      message: 'All fields are required.',
     })
   }
 
   if (password.length < 6) {
     return res.status(400).json({
       success: false,
-      message: "Password must be at least 6 characters long."
+      message: 'Password must be at least 6 characters long.',
     })
   }
 
@@ -26,7 +184,7 @@ const validateSignup = (req, res, next) => {
   if (!emailRegex.test(email)) {
     return res.status(400).json({
       success: false,
-      message: "Please provide a valid email address."
+      message: 'Please provide a valid email address.',
     })
   }
 
@@ -39,7 +197,7 @@ const validateSignin = (req, res, next) => {
   if (!email || !password) {
     return res.status(400).json({
       success: false,
-      message: "Email and password are required."
+      message: 'Email and password are required.',
     })
   }
 
@@ -53,7 +211,7 @@ const authenticateToken = async (req, res, next) => {
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({
         success: false,
-        message: "Access token required"
+        message: 'Access token required',
       })
     }
 
@@ -61,7 +219,7 @@ const authenticateToken = async (req, res, next) => {
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: "Access token required"
+        message: 'Access token required',
       })
     }
 
@@ -71,50 +229,54 @@ const authenticateToken = async (req, res, next) => {
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: "User not found"
+        message: 'User not found',
       })
     }
 
     req.user = user
     next()
   } catch (error) {
-    console.error("Authentication error:", error)
+    console.error('Authentication error:', error)
 
     if (error.name === 'JsonWebTokenError') {
       return res.status(401).json({
         success: false,
-        message: "Invalid token"
+        message: 'Invalid token',
       })
     }
 
     if (error.name === 'TokenExpiredError') {
       return res.status(401).json({
         success: false,
-        message: "Token expired"
+        message: 'Token expired',
       })
     }
 
     return res.status(500).json({
       success: false,
-      message: "Authentication failed"
+      message: 'Authentication failed',
     })
   }
 }
 
 // Signup Route
-router.post("/signup", validateSignup, async (req, res) => {
+router.post('/signup', validateSignup, async (req, res) => {
   try {
     const { firstName, lastName, username, email, password } = req.body
 
     // Check for existing user
     const existingUser = await User.findOne({
-      $or: [{ email: email.toLowerCase() }, { username: username.toLowerCase() }]
+      $or: [
+        { email: email.toLowerCase() },
+        { username: username.toLowerCase() },
+      ],
     })
 
     if (existingUser) {
       return res.status(409).json({
         success: false,
-        message: "Email or username already taken. Please use different credentials.",
+        message:
+          'Email or username already taken. Please use different credentials.',
       })
     }
 
@@ -131,19 +293,19 @@ router.post("/signup", validateSignup, async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: "User registered successfully.",
+      message: 'User registered successfully.',
     })
   } catch (error) {
-    console.error("Signup error:", error)
+    console.error('Signup error:', error)
     res.status(500).json({
       success: false,
-      message: "Error registering user. Please try again.",
+      message: 'Error registering user. Please try again.',
     })
   }
 })
 
 // Login Route
-router.post("/signin", validateSignin, async (req, res) => {
+router.post('/signin', validateSignin, async (req, res) => {
   const { email, password } = req.body
 
   try {
@@ -151,7 +313,7 @@ router.post("/signin", validateSignin, async (req, res) => {
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: "Invalid credentials.",
+        message: 'Invalid credentials.',
       })
     }
 
@@ -159,17 +321,17 @@ router.post("/signin", validateSignin, async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({
         success: false,
-        message: "Invalid credentials.",
+        message: 'Invalid credentials.',
       })
     }
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "24h",
+      expiresIn: '24h',
     })
 
     res.status(200).json({
       success: true,
-      message: "User logged in successfully.",
+      message: 'User logged in successfully.',
       token: token,
       user: {
         id: user._id,
@@ -180,23 +342,23 @@ router.post("/signin", validateSignin, async (req, res) => {
       },
     })
   } catch (error) {
-    console.error("Login error:", error)
+    console.error('Login error:', error)
     res.status(500).json({
       success: false,
-      message: "Unable to login. Please try again.",
+      message: 'Unable to login. Please try again.',
     })
   }
 })
 
 // Validate Token Route
-router.get("/validate-token", async (req, res) => {
+router.get('/validate-token', async (req, res) => {
   try {
     const authHeader = req.headers.authorization
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({
         success: false,
         valid: false,
-        message: "Access token required"
+        message: 'Access token required',
       })
     }
 
@@ -206,7 +368,7 @@ router.get("/validate-token", async (req, res) => {
       return res.status(401).json({
         success: false,
         valid: false,
-        message: "Access token required"
+        message: 'Access token required',
       })
     }
 
@@ -217,7 +379,7 @@ router.get("/validate-token", async (req, res) => {
       return res.status(401).json({
         success: false,
         valid: false,
-        message: "User not found"
+        message: 'User not found',
       })
     }
 
@@ -231,16 +393,16 @@ router.get("/validate-token", async (req, res) => {
         username: user.username,
         email: user.email,
       },
-      message: "Token verified successfully"
+      message: 'Token verified successfully',
     })
   } catch (error) {
-    console.error("Token validation error:", error)
+    console.error('Token validation error:', error)
 
     if (error.name === 'JsonWebTokenError') {
       return res.status(401).json({
         success: false,
         valid: false,
-        message: "Invalid token"
+        message: 'Invalid token',
       })
     }
 
@@ -248,30 +410,30 @@ router.get("/validate-token", async (req, res) => {
       return res.status(401).json({
         success: false,
         valid: false,
-        message: "Token expired"
+        message: 'Token expired',
       })
     }
 
     return res.status(500).json({
       success: false,
       valid: false,
-      message: "Token validation failed"
+      message: 'Token validation failed',
     })
   }
 })
 
 // Logout Route
-router.post("/logout", (req, res) => {
+router.post('/logout', (req, res) => {
   // Note: For true logout functionality, you might want to implement a token blacklist
   // For now, we'll just return success as the token should be removed from client-side
   res.status(200).json({
     success: true,
-    message: "Logged out successfully."
+    message: 'Logged out successfully.',
   })
 })
 
 // Get current user profile
-router.get("/profile", authenticateToken, async (req, res) => {
+router.get('/profile', authenticateToken, async (req, res) => {
   try {
     res.status(200).json({
       success: true,
@@ -282,138 +444,138 @@ router.get("/profile", authenticateToken, async (req, res) => {
         username: req.user.username,
         email: req.user.email,
         createdAt: req.user.createdAt,
-        updatedAt: req.user.updatedAt
-      }
+        updatedAt: req.user.updatedAt,
+      },
     })
   } catch (error) {
-    console.error("Profile fetch error:", error)
+    console.error('Profile fetch error:', error)
     res.status(500).json({
       success: false,
-      message: "Unable to fetch user profile"
+      message: 'Unable to fetch user profile',
     })
   }
 })
 
 // Update user profile (username)
-router.put("/update-profile", authenticateToken, async (req, res) => {
+router.put('/update-profile', authenticateToken, async (req, res) => {
   try {
-    const { username } = req.body;
+    const { username } = req.body
 
     if (!username || username.trim().length === 0) {
       return res.status(400).json({
         success: false,
-        message: "Username is required"
-      });
+        message: 'Username is required',
+      })
     }
 
     // Check if username is already taken by another user
     const existingUser = await User.findOne({
       username: username.toLowerCase().trim(),
-      _id: { $ne: req.user._id }
-    });
+      _id: { $ne: req.user._id },
+    })
 
     if (existingUser) {
       return res.status(409).json({
         success: false,
-        message: "Username already taken. Please choose a different one."
-      });
+        message: 'Username already taken. Please choose a different one.',
+      })
     }
 
     // Update username
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,
       { username: username.toLowerCase().trim() },
-      { new: true }
-    ).select('-password');
+      { new: true },
+    ).select('-password')
 
     res.status(200).json({
       success: true,
-      message: "Profile updated successfully",
+      message: 'Profile updated successfully',
       user: {
         id: updatedUser._id,
         firstName: updatedUser.firstName,
         lastName: updatedUser.lastName,
         username: updatedUser.username,
         email: updatedUser.email,
-      }
-    });
+      },
+    })
   } catch (error) {
-    console.error("Update profile error:", error);
+    console.error('Update profile error:', error)
     res.status(500).json({
       success: false,
-      message: "Failed to update profile"
-    });
+      message: 'Failed to update profile',
+    })
   }
-});
+})
 
 // Change password
-router.put("/change-password", authenticateToken, async (req, res) => {
+router.put('/change-password', authenticateToken, async (req, res) => {
   try {
-    const { currentPassword, newPassword } = req.body;
+    const { currentPassword, newPassword } = req.body
 
     if (!currentPassword || !newPassword) {
       return res.status(400).json({
         success: false,
-        message: "Current password and new password are required"
-      });
+        message: 'Current password and new password are required',
+      })
     }
 
     if (newPassword.length < 6) {
       return res.status(400).json({
         success: false,
-        message: "New password must be at least 6 characters long"
-      });
+        message: 'New password must be at least 6 characters long',
+      })
     }
 
     // Get user with password
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user._id)
 
     // Verify current password
-    const isCurrentPasswordValid = await user.comparePassword(currentPassword);
+    const isCurrentPasswordValid = await user.comparePassword(currentPassword)
     if (!isCurrentPasswordValid) {
       return res.status(401).json({
         success: false,
-        message: "Current password is incorrect"
-      });
+        message: 'Current password is incorrect',
+      })
     }
 
     // Update password
-    user.password = newPassword;
-    await user.save();
+    user.password = newPassword
+    await user.save()
 
     res.status(200).json({
       success: true,
-      message: "Password updated successfully"
-    });
+      message: 'Password updated successfully',
+    })
   } catch (error) {
-    console.error("Change password error:", error);
+    console.error('Change password error:', error)
     res.status(500).json({
       success: false,
-      message: "Failed to change password"
-    });
+      message: 'Failed to change password',
+    })
   }
-});
+})
 
 // Delete user account
-router.delete("/delete-account", authenticateToken, async (req, res) => {
+router.delete('/delete-account', authenticateToken, async (req, res) => {
   try {
-    await User.findByIdAndDelete(req.user._id);
+    await User.findByIdAndDelete(req.user._id)
 
     res.status(200).json({
       success: true,
-      message: "Account deleted successfully"
-    });
+      message: 'Account deleted successfully',
+    })
   } catch (error) {
-    console.error("Delete account error:", error);
+    console.error('Delete account error:', error)
     res.status(500).json({
       success: false,
-      message: "Failed to delete account"
-    });
+      message: 'Failed to delete account',
+    })
   }
-});
+})
 
 module.exports = router
-
+// -----------------------------------------------
 // const express = require("express");
 // const router = express.Router();
 // const User = require("../models/Users");

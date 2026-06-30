@@ -1,77 +1,77 @@
-import React, { useEffect, useState } from 'react';
-import Layout from '../layout/Layout';
-import UserMessengerEntries from '../components/UserMessengerEntries';
-import Messages from '../components/Messages';
-import { getConversations } from '../api/messages';
-import { useAuth } from '../../utils/AuthContext';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import Layout from '../layout/Layout'
+import UserMessengerEntries from '../components/UserMessengerEntries'
+import Messages from '../components/Messages'
+import { getConversations } from '../api/messages'
+import { useAuth } from '../../../utils/AuthContext'
+import { useLocation } from 'react-router-dom'
 
 const MessengerView = () => {
-  const [conservant, setConservant] = useState(null);
-  const [conversations, setConversations] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [width, setWindowWidth] = useState(0);
-  const mobile = width < 800;
-  const { user } = useAuth();
-  const { state } = useLocation();
-  const newConservant = state && state.user;
+  const [conservant, setConservant] = useState(null)
+  const [conversations, setConversations] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [width, setWindowWidth] = useState(0)
+  const mobile = width < 800
+  const { user } = useAuth()
+  const { state } = useLocation()
+  const newConservant = state && state.user
 
   const getConversation = (conversations, conservantId) => {
     for (let i = 0; i < conversations.length; i++) {
-      const conversation = conversations[i];
+      const conversation = conversations[i]
       if (conversation.recipient._id === conservantId) {
-        return conversation;
+        return conversation
       }
     }
-  };
+  }
 
   const fetchConversations = async () => {
-    if (!user) return;
+    if (!user) return
 
     try {
-      let conversations = await getConversations(user);
+      let conversations = await getConversations(user)
       if (newConservant) {
-        setConservant(newConservant);
+        setConservant(newConservant)
         if (!getConversation(conversations, newConservant._id)) {
           const newConversation = {
             _id: newConservant._id,
             recipient: newConservant,
             new: true,
             messages: [],
-          };
-          conversations = [newConversation, ...conversations];
+          }
+          conversations = [newConversation, ...conversations]
         }
       }
-      setConversations(conversations);
+      setConversations(conversations)
     } catch (error) {
-      console.error('Error fetching conversations:', error);
+      console.error('Error fetching conversations:', error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    fetchConversations();
-  }, [user]);
+    fetchConversations()
+  }, [user])
 
   useEffect(() => {
     const updateDimensions = () => {
-      setWindowWidth(window.innerWidth);
-    };
+      setWindowWidth(window.innerWidth)
+    }
 
-    updateDimensions();
-    window.addEventListener("resize", updateDimensions);
-    return () => window.removeEventListener("resize", updateDimensions);
-  }, []);
+    updateDimensions()
+    window.addEventListener('resize', updateDimensions)
+    return () => window.removeEventListener('resize', updateDimensions)
+  }, [])
 
   return (
     <Layout>
-      <div className="h-[calc(100vh-140px)] bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-        <div className="flex h-full">
+      <div className='h-[calc(100vh-140px)] bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden'>
+        <div className='flex h-full'>
           {!mobile ? (
             <>
               {/* Conversations List - Desktop */}
-              <div className="w-1/3 border-r border-gray-200 dark:border-gray-600 h-full">
+              <div className='w-1/3 border-r border-gray-200 dark:border-gray-600 h-full'>
                 <UserMessengerEntries
                   conservant={conservant}
                   conversations={conversations}
@@ -81,20 +81,20 @@ const MessengerView = () => {
               </div>
 
               {/* Messages Area - Desktop */}
-              <div className="w-2/3 h-full">
+              <div className='w-2/3 h-full'>
                 <MessagesList
-  conservant={conservant}
-  conversations={conversations}
-  setConservant={setConservant}
-  setConversations={setConversations}
-  getConversation={getConversation}
-  mobile={mobile}
-/>
+                  conservant={conservant}
+                  conversations={conversations}
+                  setConservant={setConservant}
+                  setConversations={setConversations}
+                  getConversation={getConversation}
+                  mobile={mobile}
+                />
               </div>
             </>
           ) : !conservant ? (
             /* Conversations List - Mobile (no conservant selected) */
-            <div className="w-full h-full">
+            <div className='w-full h-full'>
               <UserMessengerEntries
                 conservant={conservant}
                 conversations={conversations}
@@ -104,21 +104,21 @@ const MessengerView = () => {
             </div>
           ) : (
             /* Messages Area - Mobile (conservant selected) */
-            <div className="w-full h-full">
+            <div className='w-full h-full'>
               <MessagesList
-  conservant={conservant}
-  conversations={conversations}
-  setConservant={setConservant}
-  setConversations={setConversations}
-  getConversation={getConversation}
-  mobile={mobile}
-/>
+                conservant={conservant}
+                conversations={conversations}
+                setConservant={setConservant}
+                setConversations={setConversations}
+                getConversation={getConversation}
+                mobile={mobile}
+              />
             </div>
           )}
         </div>
       </div>
     </Layout>
-  );
-};
+  )
+}
 
-export default MessengerView;
+export default MessengerView

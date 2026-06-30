@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
-import Loading from './Loading'
+import Loading from './unicollab/components/Loading'
 
 const Protected = ({ children, fallback = null }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)

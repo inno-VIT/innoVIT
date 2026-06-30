@@ -1,0 +1,242 @@
+.markdown {
+  line-height: 1.6;
+  color: #374151;
+}
+
+.markdown :first-child {
+  margin-top: 0;
+}
+
+.markdown :last-child {
+  margin-bottom: 0;
+}
+
+/* Headings */
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #111827;
+}
+
+.markdown h1 {
+  font-size: 1.875rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.3em;
+}
+
+.markdown h2 {
+  font-size: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.3em;
+}
+
+.markdown h3 {
+  font-size: 1.25rem;
+}
+
+.markdown h4 {
+  font-size: 1.125rem;
+}
+
+.markdown h5 {
+  font-size: 1rem;
+}
+
+.markdown h6 {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+/* Paragraphs */
+.markdown p {
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+/* Lists */
+.markdown ul,
+.markdown ol {
+  margin-top: 0;
+  margin-bottom: 1em;
+  padding-left: 2em;
+}
+
+.markdown li {
+  margin-bottom: 0.25em;
+}
+
+.markdown li > p {
+  margin-bottom: 0.5em;
+}
+
+.markdown ul {
+  list-style-type: disc;
+}
+
+.markdown ol {
+  list-style-type: decimal;
+}
+
+/* Code */
+.markdown code {
+  background-color: #f3f4f6;
+  border-radius: 0.375rem;
+  padding: 0.125rem 0.25rem;
+  font-size: 0.875em;
+  color: #dc2626;
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas,
+    monospace;
+}
+
+.markdown pre {
+  background-color: #1f2937;
+  color: #f9fafb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 1em 0;
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas,
+    monospace;
+  font-size: 0.875em;
+  line-height: 1.5;
+}
+
+.markdown pre code {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* Blockquotes */
+.markdown blockquote {
+  border-left: 4px solid #d1d5db;
+  padding-left: 1em;
+  margin: 1em 0;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Links */
+.markdown a {
+  color: #2563eb;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.markdown a:hover {
+  color: #1d4ed8;
+}
+
+/* Tables */
+.markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+  font-size: 0.875em;
+}
+
+.markdown th,
+.markdown td {
+  border: 1px solid #d1d5db;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.markdown th {
+  background-color: #f9fafb;
+  font-weight: 600;
+}
+
+.markdown tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+/* Images */
+.markdown img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.375rem;
+  margin: 1em 0;
+}
+
+/* Horizontal Rule */
+.markdown hr {
+  border: none;
+  border-top: 1px solid #d1d5db;
+  margin: 2em 0;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .markdown {
+    color: #d1d5db;
+  }
+
+  .markdown h1,
+  .markdown h2,
+  .markdown h3,
+  .markdown h4,
+  .markdown h5,
+  .markdown h6 {
+    color: #f9fafb;
+  }
+
+  .markdown h1,
+  .markdown h2 {
+    border-bottom-color: #4b5563;
+  }
+
+  .markdown code {
+    background-color: #374151;
+    color: #f87171;
+  }
+
+  .markdown blockquote {
+    border-left-color: #4b5563;
+    color: #9ca3af;
+  }
+
+  .markdown th {
+    background-color: #374151;
+  }
+
+  .markdown tr:nth-child(even) {
+    background-color: #374151;
+  }
+
+  .markdown th,
+  .markdown td {
+    border-color: #4b5563;
+  }
+}
+
+/* Additional utility classes for specific use cases */
+.markdown.small {
+  font-size: 0.875rem;
+}
+
+.markdown.large {
+  font-size: 1.125rem;
+}
+
+.markdown.compact p {
+  margin-bottom: 0.5em;
+}
+
+.markdown.compact h1,
+.markdown.compact h2,
+.markdown.compact h3,
+.markdown.compact h4,
+.markdown.compact h5,
+.markdown.compact h6 {
+  margin-top: 1em;
+  margin-bottom: 0.25em;
+}

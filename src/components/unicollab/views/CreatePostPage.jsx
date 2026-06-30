@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { createPost } from '../api/posts'
-import { useAuth } from '../../utils/AuthContext'
+import { useAuth } from '../../../utils/AuthContext'
 import Layout from '../layout/Layout'
 import ErrorAlert from '../components/ErrorAlert'
 import { ArrowLeft, HelpCircle } from 'lucide-react'
-import { Button } from '../ui/Button'
+import { Button } from '../../ui/Button'
 import { Link } from 'react-router-dom'
 
 const CreatePostPage = () => {

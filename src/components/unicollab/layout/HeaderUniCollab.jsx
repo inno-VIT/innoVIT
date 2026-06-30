@@ -1,10 +1,18 @@
 'use client'
 
-import { Search, MessageCircle, Home, Users, Plus, User, LogOut } from 'lucide-react'
+import {
+  Search,
+  MessageCircle,
+  Home,
+  Users,
+  Plus,
+  User,
+  LogOut,
+} from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '../../ui/Button.jsx'
 import { Input } from '../../ui/Input.jsx'
-import { useAuth } from '../../utils/AuthContext'
+import { useAuth } from '../../../utils/AuthContext.jsx'
 import { useState } from 'react'
 
 export default function HeaderUniCollab() {
@@ -12,10 +20,12 @@ export default function HeaderUniCollab() {
   const navigate = useNavigate()
   const [search, setSearch] = useState('')
 
-  const handleSearch = (e) => {
+  const handleSearch = e => {
     e.preventDefault()
     if (search.trim()) {
-      navigate(`/unicollab/search?${new URLSearchParams({ query: search.trim() })}`)
+      navigate(
+        `/unicollab/search?${new URLSearchParams({ query: search.trim() })}`,
+      )
       setSearch('')
     }
   }
@@ -77,7 +87,7 @@ export default function HeaderUniCollab() {
             <Input
               placeholder='Search posts, users...'
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={e => setSearch(e.target.value)}
               className='w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white'
             />
           </form>
@@ -89,7 +99,7 @@ export default function HeaderUniCollab() {
           <Button
             onClick={handleCreatePost}
             className='hidden sm:flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white'
-            size="sm"
+            size='sm'
           >
             <Plus className='h-4 w-4' />
             <span className='hidden lg:inline'>Create Post</span>
@@ -125,8 +135,8 @@ export default function HeaderUniCollab() {
               {/* Logout */}
               <Button
                 onClick={handleLogout}
-                variant="ghost"
-                size="sm"
+                variant='ghost'
+                size='sm'
                 className='hidden md:flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400'
               >
                 <LogOut className='h-4 w-4' />
@@ -136,13 +146,20 @@ export default function HeaderUniCollab() {
           ) : (
             /* Auth Buttons */
             <div className='flex items-center gap-2'>
-              <Link to="/login">
-                <Button variant="ghost" size="sm" className='text-gray-700 dark:text-gray-300'>
+              <Link to='/login'>
+                <Button
+                  variant='ghost'
+                  size='sm'
+                  className='text-gray-700 dark:text-gray-300'
+                >
                   Login
                 </Button>
               </Link>
-              <Link to="/signup">
-                <Button size="sm" className='bg-blue-600 hover:bg-blue-700 text-white'>
+              <Link to='/signup'>
+                <Button
+                  size='sm'
+                  className='bg-blue-600 hover:bg-blue-700 text-white'
+                >
                   Sign Up
                 </Button>
               </Link>
@@ -159,7 +176,7 @@ export default function HeaderUniCollab() {
             <Input
               placeholder='Search posts, users...'
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={e => setSearch(e.target.value)}
               className='w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white'
             />
           </div>
