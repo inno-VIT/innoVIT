@@ -53,7 +53,7 @@ const FindUsers = () => {
         <div className='border-t border-gray-200'></div>
 
         {/* Users List */}
-        {loading ? (
+        {/* {loading ? (
           <Loading />
         ) : (
           users &&
@@ -66,6 +66,27 @@ const FindUsers = () => {
               bio={user.bio}
             />
           ))
+        )} */}
+        {loading ? (
+          <Loading />
+        ) : Array.isArray(users) ? ( users.length > 0 ? (
+          users.map(user => (
+            <UserEntry
+          key = {user._id}
+          username = {user.username}
+          userId = {user._id}
+          avatar = {user.avatar}
+          bio = {user.bio}
+        />
+          ))
+        ) : (
+          <div className='text-center py-6 text-gray-500'>
+            No users found. Try refreshing.
+          </div>
+        )) : (
+          <div className='text-center py-6 text-gray-500'>
+            Error fetching users. Please try again later.
+          </div>
         )}
 
         {/* Empty State */}
