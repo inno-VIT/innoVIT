@@ -158,8 +158,8 @@ const UniCollab = () => {
   return (
     <div className='max-w-[100vw] font-sora'>
       {isAuthenticated ? (
-        <Layout>
-          <HeaderUniCollab />
+        // <Layout>
+          // <HeaderUniCollab />
           <div className='space-y-6'>
             <Tabs
               value={activeTab}
@@ -333,7 +333,7 @@ const UniCollab = () => {
               </AnimatePresence>
             </Tabs>
           </div>
-        </Layout>
+        // </Layout>
       ) : (
         <div className='flex h-[86vh] min-h-[86vh] max-h-[86vh] w-full justify-center items-center flex-col'>
           <motion.div
@@ -359,7 +359,7 @@ const UniCollab = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <span className='font-black text-tertiary'> Oops! </span> Looks like
-            you're not signed in. Please sign up or log in to access this
+            you are not signed in. Please sign up or log in to access this
             feature!{' '}
           </motion.h3>
           <motion.div
