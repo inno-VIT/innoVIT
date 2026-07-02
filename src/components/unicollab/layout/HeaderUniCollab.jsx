@@ -48,8 +48,11 @@ export default function HeaderUniCollab() {
   }
 
   return (
-    <header className='sticky top-0 z-20 w-full backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-gray-200 dark:border-gray-800'>
-      <div className='container flex h-16 items-center justify-between'>
+    // <header className='sticky top-0 z-20 w-full backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-gray-200 dark:border-gray-800'>
+    <header className='sticky top-[80px] z-20 w-full bg-background border-b border-gray-200 dark:border-gray-800'>
+      {/* <div className='container flex h-16 items-center justify-between'> */}
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+      {/* <div className="flex h-16 items-center justify-between px-8"> */}
         {/* Left Section - Logo and Navigation */}
         <div className='flex items-center gap-6 md:gap-8'>
           <Link to='/unicollab' className='flex items-center space-x-2'>
