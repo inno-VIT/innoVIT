@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 import { getPosts } from '../api/posts'
 import { useAuth } from '../../../utils/AuthContext'
-import Loading from './Loading'
+import Loading from './shared/Loading'
 import PostCard from './PostCard'
 
 const TopPosts = () => {

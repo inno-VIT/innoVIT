@@ -4,7 +4,7 @@ import {
   Loader2,
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../../utils/AuthContext'
+import { useAuth } from '../../../../utils/AuthContext'
 
 const LikeBox = ({
   likeCount = 0,

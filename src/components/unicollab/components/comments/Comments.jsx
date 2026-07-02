@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { MessageCircle } from 'lucide-react'
 
-import { useAuth } from '../../../utils/AuthContext'
-import { getComments, createComment } from '../api/posts'
+import { useAuth } from '../../../../utils/AuthContext'
+import { getComments, createComment } from '../../api/posts'
 
-import Loading from './Loading'
-import Comment from '../../post/Comment'
+import Loading from '../shared/Loading'
+import Comment from './Comment'
 import CommentEditor from './CommentEditor'
 
 const Comments = ({ postId }) => {

@@ -9,15 +9,15 @@ import {
   X,
 } from 'lucide-react'
 
-import { useAuth } from '../../utils/AuthContext'
+import { useAuth } from '../../../../utils/AuthContext'
 import {
   likeComment,
   unlikeComment,
   updateComment,
   deleteComment,
-} from '../unicollab/api/posts'
+} from '../../api/posts'
 
-import CommentEditor from '../unicollab/components/CommentEditor'
+import CommentEditor from './CommentEditor'
 
 const Comment = ({
   comment,

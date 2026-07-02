@@ -1,7 +1,7 @@
 import React from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
-import Loading from './unicollab/components/Loading'
+import Loading from './unicollab/components/shared/Loading'
 
 const Protected = ({ children, fallback = null }) => {
   const { isAuthenticated, loading } = useAuth()

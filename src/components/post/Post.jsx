@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader } from '../ui/Card.jsx'
 import { Button } from '../ui/Button.jsx'
 import { ThumbsUp, ThumbsDown, MessageCircle, Send, Image as ImageIcon } from 'lucide-react'
 import { Textarea } from '../ui/TextArea.jsx'
-import Comment from './Comment.jsx'
+import Comment from '../unicollab/components/comments/Comment.jsx'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const Post = ({ post, onLike, onDislike, onComment, currentUser }) => {

@@ -1,6 +1,6 @@
 import { MessageCircle } from 'lucide-react'
 
-import Loading from './Loading'
+import Loading from './shared/Loading'
 import UserMessengerEntry from './UserMessengerEntry'
 
 const UserMessengerEntries = ({

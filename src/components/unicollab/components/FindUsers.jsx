@@ -4,7 +4,7 @@ import { Users, RefreshCw } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 import { getRandomUsers } from '../api/users'
-import Loading from './Loading'
+import Loading from './shared/Loading'
 import UserEntry from './UserEntry'
 
 const FindUsers = () => {

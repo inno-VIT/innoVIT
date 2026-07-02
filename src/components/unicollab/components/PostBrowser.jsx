@@ -5,7 +5,7 @@ import { RefreshCw, ArrowUp } from 'lucide-react'
 import { getPosts, getUserLikedPosts } from '../api/posts'
 import { useAuth } from '../../../utils/AuthContext'
 
-import Loading from './Loading'
+import Loading from './shared/Loading'
 import PostCard from './PostCard'
 import SortBySelect from './SortBySelect'
 import CreatePost from '../../post/CreatePost'

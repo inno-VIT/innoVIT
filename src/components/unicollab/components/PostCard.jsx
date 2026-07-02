@@ -18,8 +18,8 @@ import {
 import { useAuth } from '../../../utils/AuthContext'
 
 import ContentDetails from './ContentDetails'
-import LikeBox from './LikeBox'
-import Markdown from './Markdown'
+import LikeBox from './shared/LikeBox'
+import Markdown from './shared/Markdown'
 import ContentUpdateEditor from './ContentUpdateEditor'
 import UserLikePreview from './UserLikePreview'
 

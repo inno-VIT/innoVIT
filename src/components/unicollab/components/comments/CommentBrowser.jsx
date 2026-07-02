@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { getUserComments } from '../api/posts'
-import { useAuth } from '../../../utils/AuthContext'
-import Loading from './Loading'
+import { getUserComments } from '../../api/posts'
+import { useAuth } from '../../../../utils/AuthContext'
+import Loading from '../shared/Loading'
 import Comment from './Comments' // Your enhanced Comment component
 
 const CommentBrowser = ({ profileUser }) => {

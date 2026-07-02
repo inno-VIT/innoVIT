@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Edit, MessageCircle } from 'lucide-react'
 import { useAuth } from '../../utils/AuthContext'
 import ContentUpdateEditor from './ContentUpdateEditor'
-import Loading from './Loading'
+import Loading from './shared/Loading'
 import { useNavigate } from 'react-router-dom'
 
 const ProfileCard = ({

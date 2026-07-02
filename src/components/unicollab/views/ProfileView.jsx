@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 // import Layout from '../layout/Layout'
-import Loading from '../components/Loading'
-import ErrorAlert from '../components/ErrorAlert'
+import Loading from '../components/shared/Loading'
+import ErrorAlert from '../components/shared/ErrorAlert'
 import { getUser } from '../api/users'
 import { useAuth } from '../../../utils/AuthContext'
 import ProfileTabs from '../components/ProfileTabs'
 import PostBrowser from '../components/PostBrowser'
-import CommentBrowser from '../components/CommentBrowser'
+import CommentBrowser from '../components/comments/CommentBrowser'
 
 const ProfileView = () => {
   const [loading, setLoading] = useState(true)
