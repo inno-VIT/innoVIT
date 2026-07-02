@@ -283,7 +283,7 @@ const UniCollab = () => {
                 displayedPosts.map(post => (
                   <motion.div
                     key={post._id}
-                    layout
+                    // layout
                   >
                     <Post
                       post={post}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Layout from '../layout/Layout'
+// import Layout from '../layout/Layout'
 import UserMessengerEntries from '../components/UserMessengerEntries'
 import Messages from '../components/Messages'
 import { getConversations } from '../api/messages'
@@ -65,7 +65,7 @@ const MessengerView = () => {
   }, [])
 
   return (
-    <Layout>
+    <>
       <div className='h-[calc(100vh-140px)] bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden'>
         <div className='flex h-full'>
           {!mobile ? (
@@ -117,7 +117,7 @@ const MessengerView = () => {
           )}
         </div>
       </div>
-    </Layout>
+    </>
   )
 }
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { createPost } from '../api/posts'
 import { useAuth } from '../../../utils/AuthContext'
-import Layout from '../layout/Layout'
+// import Layout from '../layout/Layout'
 import ErrorAlert from '../components/ErrorAlert'
 import { ArrowLeft, HelpCircle } from 'lucide-react'
 import { Button } from '../../ui/Button'
@@ -63,7 +63,7 @@ const CreatePostPage = () => {
 
   if (!user) {
     return (
-      <Layout>
+      <>
         <div className='max-w-4xl mx-auto'>
           <div className='text-center py-12'>
             <h2 className='text-xl font-semibold mb-4'>
@@ -74,7 +74,7 @@ const CreatePostPage = () => {
             </Link>
           </div>
         </div>
-      </Layout>
+      </>
     )
   }
 

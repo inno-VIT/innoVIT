@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import Layout from '../layout/Layout'
+// import Layout from '../layout/Layout'
 import Loading from '../components/Loading'
 import ErrorAlert from '../components/ErrorAlert'
 import { getPost, likePost, unlikePost } from '../api/posts'
@@ -82,16 +82,16 @@ const PostView = () => {
 
   if (loading) {
     return (
-      <Layout>
+      <>
         <div className='max-w-4xl mx-auto'>
           <Loading />
         </div>
-      </Layout>
+      </>
     )
   }
 
   return (
-    <Layout>
+    <>
       <div className='max-w-4xl mx-auto'>
         {post ? (
           <div className='space-y-6'>
@@ -168,7 +168,7 @@ const PostView = () => {
           error && <ErrorAlert error={error} />
         )}
       </div>
-    </Layout>
+    </>
   )
 }
 

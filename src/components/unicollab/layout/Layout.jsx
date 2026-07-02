@@ -18,74 +18,74 @@
 
 // export default Layout
 
-import HeaderUniCollab from './HeaderUniCollab'
-import Sidebar from './Sidebar'
-import RightSidebar from './RightSidebar'
+// import HeaderUniCollab from './HeaderUniCollab'
+// import Sidebar from './Sidebar'
+// import RightSidebar from './RightSidebar'
 
-const Layout = ({ children }) => {
-  return (
-    <div className="min-h-screen bg-[#080912]">
+// const Layout = ({ children }) => {
+//   return (
+//     <div className="min-h-screen bg-[#080912]">
 
-      {/* UniCollab Header */}
-      <HeaderUniCollab />
+//       {/* UniCollab Header */}
+//       <HeaderUniCollab />
 
-      {/* Main Grid */}
-      <div
-        className="
-          mx-auto
-          max-w-[1700px]
-          pt-20
-          grid
-          grid-cols-12
-          gap-6
-          px-6
-        "
-      >
+//       {/* Main Grid */}
+//       <div
+//         className="
+//           mx-auto
+//           max-w-[1700px]
+//           pt-20
+//           grid
+//           grid-cols-12
+//           gap-6
+//           px-6
+//         "
+//       >
 
-        {/* Left Sidebar */}
-        <aside
-          className="
-            hidden
-            lg:block
-            lg:col-span-3
-            xl:col-span-2
-            sticky
-            top-24
-            h-[calc(100vh-110px)]
-          "
-        >
-          <Sidebar />
-        </aside>
+//         {/* Left Sidebar */}
+//         <aside
+//           className="
+//             hidden
+//             lg:block
+//             lg:col-span-3
+//             xl:col-span-2
+//             sticky
+//             top-24
+//             h-[calc(100vh-110px)]
+//           "
+//         >
+//           <Sidebar />
+//         </aside>
 
-        {/* Feed */}
-        <main
-          className="
-            col-span-12
-            lg:col-span-9
-            xl:col-span-7
-            min-h-screen
-          "
-        >
-          {children}
-        </main>
+//         {/* Feed */}
+//         <main
+//           className="
+//             col-span-12
+//             lg:col-span-9
+//             xl:col-span-7
+//             min-h-screen
+//           "
+//         >
+//           {children}
+//         </main>
 
-        {/* Right Sidebar */}
-        <aside
-          className="
-            hidden
-            xl:block
-            xl:col-span-3
-            sticky
-            top-24
-            h-[calc(100vh-110px)]
-          "
-        >
-          <RightSidebar />
-        </aside>
+//         {/* Right Sidebar */}
+//         <aside
+//           className="
+//             hidden
+//             xl:block
+//             xl:col-span-3
+//             sticky
+//             top-24
+//             h-[calc(100vh-110px)]
+//           "
+//         >
+//           <RightSidebar />
+//         </aside>
 
-      </div>
-    </div>
-  )
-}
+//       </div>
+//     </div>
+//   )
+// }
 
-export default Layout
+// export default Layout

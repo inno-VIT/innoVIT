@@ -1,10 +1,10 @@
 import React from 'react';
-import Layout from '../layout/Layout';
+// import Layout from '../layout/Layout';
 import PostEditor from '../components/PostEditor';
 
 const CreatePost = () => {
   return (
-    <Layout>
+    <>
       <div className="max-w-4xl mx-auto">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -16,7 +16,7 @@ const CreatePost = () => {
         </div>
         <PostEditor />
       </div>
-    </Layout>
+    </>
   );
 };
 

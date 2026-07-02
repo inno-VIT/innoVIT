@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import Layout from '../layout/Layout'
+// import Layout from '../layout/Layout'
 import Loading from '../components/Loading'
 import ErrorAlert from '../components/ErrorAlert'
 import { getUser } from '../api/users'
@@ -52,7 +52,7 @@ const ProfileView = () => {
   }
 
   return (
-    <Layout>
+    <>
       <div className='max-w-6xl mx-auto'>
         {loading ? (
           <Loading />
@@ -127,7 +127,7 @@ const ProfileView = () => {
           error && <ErrorAlert error={error} />
         )}
       </div>
-    </Layout>
+    </>
   )
 }
 
