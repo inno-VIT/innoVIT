@@ -1,23 +1,29 @@
 import React, { useEffect, useState } from 'react'
-import { getComments, createComment } from '../api/posts'
+import { MessageCircle } from 'lucide-react'
+
 import { useAuth } from '../../../utils/AuthContext'
+import { getComments, createComment } from '../api/posts'
+
 import Loading from './Loading'
-import Comment from './Comments' // Your enhanced Comment component
-import CommentEditor from './CommentEditor' // The standalone editor we discussed
+import Comment from '../../post/Comment'
+import CommentEditor from './CommentEditor'
 
 const Comments = ({ postId }) => {
+  const { user } = useAuth()
+
   const [comments, setComments] = useState([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
-  const { user } = useAuth()
 
   const fetchComments = async () => {
     try {
       setLoading(true)
+
       const data = await getComments({ id: postId })
+
       setComments(data.comments || [])
-    } catch (error) {
-      console.error('Error fetching comments:', error)
+    } catch (err) {
+      console.error(err)
     } finally {
       setLoading(false)
     }
@@ -29,114 +35,175 @@ const Comments = ({ postId }) => {
     }
   }, [postId])
 
-  const handleAddComment = async content => {
-    if (!user || !content.trim()) return
+  const handleCreateComment = async content => {
+    if (!content.trim() || !user) return
 
-    setSubmitting(true)
     try {
-      const newComment = await createComment({ content }, { id: postId }, user)
+      setSubmitting(true)
 
-      // Add the new comment to the top
-      setComments(prev => [newComment, ...prev])
-    } catch (error) {
-      console.error('Error adding comment:', error)
+      const created = await createComment(
+        { content },
+        { id: postId },
+        user,
+      )
+
+      setComments(prev => [created, ...prev])
+    } catch (err) {
+      console.error(err)
     } finally {
       setSubmitting(false)
     }
   }
 
-  const handleReply = (parentCommentId, replyContent) => {
-    // This would handle nested replies
-    // For now, we'll add it as a top-level comment
-    // You can enhance this for nested replies later
-    handleAddComment(replyContent)
+  const handleDelete = id => {
+    setComments(prev =>
+      prev.filter(comment => comment._id !== id),
+    )
   }
 
-  const handleDeleteComment = commentId => {
-    setComments(prev => prev.filter(comment => comment._id !== commentId))
-  }
-
-  const handleEditComment = (commentId, newContent) => {
+  const handleEdit = (id, content) => {
     setComments(prev =>
       prev.map(comment =>
-        comment._id === commentId
-          ? { ...comment, content: newContent, edited: true }
+        comment._id === id
+          ? {
+              ...comment,
+              content,
+              edited: true,
+            }
           : comment,
       ),
     )
   }
 
+  const handleReply = async (parentId, content) => {
+    if (!content.trim()) return
+
+    await handleCreateComment(content)
+  }
+
   if (loading) {
-    return <Loading label='Loading comments' />
+    return <Loading />
   }
 
   return (
-    <div className='space-y-6'>
-      {/* Comment Editor */}
+    <section className="space-y-6">
+
+      {/* Header */}
+
+      <div className="flex items-center gap-3">
+
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600 text-white">
+          <MessageCircle size={20} />
+        </div>
+
+        <div>
+
+          <h2 className="text-xl font-bold text-white">
+            Discussion
+          </h2>
+
+          <p className="text-sm text-slate-400">
+            {comments.length}{' '}
+            {comments.length === 1
+              ? 'comment'
+              : 'comments'}
+          </p>
+
+        </div>
+
+      </div>
+
+      {/* Editor */}
+
       {user ? (
-        <div className='bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6'>
-          <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-4'>
-            Add a Comment
-          </h3>
+        <div
+          className="
+            rounded-2xl
+            border
+            border-slate-800
+            bg-[#10141d]
+            p-6
+          "
+        >
           <CommentEditor
-            onSubmit={handleAddComment}
             loading={submitting}
-            placeholder='Share your thoughts on this post...'
+            placeholder="Join the discussion..."
+            onSubmit={handleCreateComment}
           />
         </div>
       ) : (
-        <div className='bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 text-center'>
-          <p className='text-yellow-800 dark:text-yellow-200'>
-            Please log in to comment on this post.
+        <div
+          className="
+            rounded-2xl
+            border
+            border-amber-700/30
+            bg-amber-500/10
+            p-5
+            text-center
+          "
+        >
+          <p className="text-amber-300">
+            Login to join the discussion.
           </p>
         </div>
       )}
 
-      {/* Comments List */}
-      <div className='space-y-4'>
-        {comments.length === 0 ? (
-          <div className='text-center py-12 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700'>
-            <div className='text-gray-500 dark:text-gray-400 text-lg mb-2'>
-              No comments yet
-            </div>
-            <p className='text-gray-400 dark:text-gray-500'>
-              {user
-                ? 'Be the first to share your thoughts!'
-                : 'Log in to be the first to comment!'}
-            </p>
-          </div>
-        ) : (
-          <>
-            <div className='flex justify-between items-center'>
-              <h3 className='text-lg font-semibold text-gray-900 dark:text-white'>
-                Comments ({comments.length})
-              </h3>
-            </div>
+      {/* Comments */}
 
-            {comments.map(comment => (
-              <Comment
-                key={comment._id}
-                comment={{
-                  id: comment._id,
-                  content: comment.content,
-                  author: comment.author?.username || 'Unknown',
-                  authorId: comment.author?._id,
-                  createdAt: comment.createdAt,
-                  likes: comment.likeCount || 0,
-                  replies: comment.children || [],
-                  edited: comment.edited,
-                  isAuthor: user && user._id === comment.author?._id,
-                }}
-                onReply={handleReply}
-                onDelete={handleDeleteComment}
-                onEdit={handleEditComment}
-                depth={0}
-              />
-            ))}
-          </>
-        )}
-      </div>
-    </div>
+      {comments.length === 0 ? (
+        <div
+          className="
+            rounded-2xl
+            border
+            border-slate-800
+            bg-[#10141d]
+            py-14
+            text-center
+          "
+        >
+          <MessageCircle
+            className="mx-auto mb-4 text-slate-600"
+            size={42}
+          />
+
+          <h3 className="text-lg font-semibold text-white">
+            No comments yet
+          </h3>
+
+          <p className="mt-2 text-slate-400">
+            Be the first to start the discussion.
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+
+          {comments.map(comment => (
+            <Comment
+              key={comment._id}
+              comment={{
+                id: comment._id,
+                content: comment.content,
+                author: comment.author?.username,
+                authorId: comment.author?._id,
+                createdAt: comment.createdAt,
+                likes: comment.likeCount || 0,
+                replies: comment.children || [],
+                edited: comment.edited,
+                isAuthor:
+                  user &&
+                  user.id === comment.author?._id,
+              }}
+              depth={0}
+              onReply={handleReply}
+              onDelete={handleDelete}
+              onEdit={handleEdit}
+            />
+          ))}
+
+        </div>
+      )}
+
+    </section>
   )
 }
 

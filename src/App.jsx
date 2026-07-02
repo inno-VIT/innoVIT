@@ -1,5 +1,5 @@
 // import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './utils/AuthContext'
 import { SocketProvider } from './utils/SocketContext'
 
@@ -52,73 +52,60 @@ const App = () => {
     <SocketProvider>
       <Routes>
 
-        {/* ---------------- Website Layout ---------------- */}
+        {/* ---------------- Website ---------------- */}
+
         <Route element={<WebsiteLayout />}>
-
           <Route path="/" element={<Hero />} />
-
           <Route path="/login" element={<Login />} />
-
           <Route path="/signup" element={<Signup />} />
-
           <Route path="/profile" element={<Profile />} />
 
+          {/* About */}
           <Route path="/about" element={<AboutCommunity />} />
-
           <Route path="/code-of-conduct" element={<CodeOfConduct />} />
-
           <Route path="/privacy" element={<PrivacyPolicy />} />
-
           <Route path="/terms" element={<TermsOfService />} />
 
           {/* Study */}
-
           <Route path="/study" element={<Study />}>
             <Route index element={<Default />} />
             <Route path=":subjectCode" element={<SubjectDetails />} />
           </Route>
-
         </Route>
 
-        {/* ---------------- UniCollab Layout ---------------- */}
+        {/* ---------------- Protected UniCollab ---------------- */}
 
         <Route
+          path="/unicollab"
           element={
             <Protected>
               <UniCollabLayout />
             </Protected>
           }
         >
+          {/* Feed */}
+          <Route index element={<UniCollab />} />
 
-          <Route path="/unicollab" element={<UniCollab />} />
+          {/* Explore */}
+          <Route path="explore" element={<ExploreView />} />
 
-          <Route path="/unicollab/explore" element={<ExploreView />} />
+          {/* Search */}
+          <Route path="search" element={<SearchView />} />
 
-          <Route
-            path="/unicollab/create-post"
-            element={<CreatePostPage />}
-          />
+          {/* Create */}
+          <Route path="create-post" element={<CreatePostPage />} />
 
-          <Route
-            path="/unicollab/post/:id"
-            element={<PostView />}
-          />
+          {/* Single Post */}
+          <Route path="post/:id" element={<PostView />} />
 
-          <Route
-            path="/unicollab/messages"
-            element={<MessengerView />}
-          />
+          {/* Messages */}
+          <Route path="messages" element={<MessengerView />} />
 
-          <Route
-            path="/unicollab/profile/:id?"
-            element={<ProfileView />}
-          />
-
-          <Route
-            path="/unicollab/search"
-            element={<SearchView />}
-          />
-
+          {/* User Profile */}
+          <Route path="profile">
+            <Route index element={<Navigate to="/unicollab" replace />} />
+            <Route path=":id" element={<ProfileView />} />
+          </Route>
         </Route>
 
         {/* ---------------- 404 ---------------- */}
@@ -129,22 +116,17 @@ const App = () => {
             <div className="min-h-screen flex items-center justify-center bg-[#080912]">
               <div className="text-center">
                 <h1 className="text-5xl font-bold text-white">404</h1>
-                <p className="mt-3 text-gray-400">
-                  Page not found
-                </p>
+                <p className="mt-3 text-gray-400">Page not found</p>
               </div>
             </div>
           }
         />
-
       </Routes>
     </SocketProvider>
   )
 }
 
 export default App
-
-
 
 
 
