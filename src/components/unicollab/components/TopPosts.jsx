@@ -5,8 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 import { getPosts } from '../api/posts'
 import { useAuth } from '../../../utils/AuthContext'
-import Loading from './shared/Loading'
-import PostCard from './PostCard'
+import Loading from '../components/shared/Loading'
+import PostCard from '../components/feed/PostCard'
 
 const TopPosts = () => {
   const { token, isAuthenticated } = useAuth()

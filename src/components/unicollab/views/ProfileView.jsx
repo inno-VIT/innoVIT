@@ -6,7 +6,7 @@ import ErrorAlert from '../components/shared/ErrorAlert'
 import { getUser } from '../api/users'
 import { useAuth } from '../../../utils/AuthContext'
 import ProfileTabs from '../components/profile/ProfileTabs'
-import PostBrowser from '../components/PostBrowser'
+import PostBrowser from '../components/feed/PostBrowser'
 import CommentBrowser from '../components/comments/CommentBrowser'
 
 const ProfileView = () => {

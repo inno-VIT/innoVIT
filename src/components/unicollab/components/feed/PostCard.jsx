@@ -13,15 +13,15 @@ import {
   likePost,
   unlikePost,
   updatePost,
-} from '../api/posts'
+} from '../../api/posts'
 
-import { useAuth } from '../../../utils/AuthContext'
+import { useAuth } from '../../../../utils/AuthContext'
 
-import ContentDetails from './ContentDetails'
-import LikeBox from './shared/LikeBox'
-import Markdown from './shared/Markdown'
-import ContentUpdateEditor from './ContentUpdateEditor'
-import UserLikePreview from './UserLikePreview'
+import ContentDetails from '../ContentDetails'
+import LikeBox from '../../components/shared/LikeBox'
+import Markdown from '../../components/shared/Markdown'
+import ContentUpdateEditor from '../ContentUpdateEditor'
+import UserLikePreview from '../UserLikePreview'
 
 const PostCard = ({
   post: initialPost,

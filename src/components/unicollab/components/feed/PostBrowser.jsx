@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
 import { RefreshCw, ArrowUp } from 'lucide-react'
 
-import { getPosts, getUserLikedPosts } from '../api/posts'
-import { useAuth } from '../../../utils/AuthContext'
+import { getPosts, getUserLikedPosts } from '../../api/posts'
+import { useAuth } from '../../../../utils/AuthContext'
 
-import Loading from './shared/Loading'
+import Loading from '../shared/Loading'
 import PostCard from './PostCard'
-import SortBySelect from './SortBySelect'
-import CreatePost from '../../post/CreatePost'
+import SortBySelect from '../SortBySelect'
+import CreatePost from '../../../post/CreatePost'
 
 const PostBrowser = ({
   createPost = false,
