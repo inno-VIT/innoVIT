@@ -34,7 +34,7 @@ const ProfileCard = ({
     )
   }
 
-  const isOwnProfile = currentUser && currentUser._id === user._id
+  const isOwnProfile = currentUser && currentUser.id === user._id
 
   return (
     <div

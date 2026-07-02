@@ -4,7 +4,7 @@ import { axiosConfig } from '../../../axiosConfig'
 const getUser = async userId => {
   try {
     const res = await axiosConfig.get(`/api/users/${userId}`)
-    return res.data
+    return res.data.data
   } catch (err) {
     console.log(err)
     throw err
@@ -16,7 +16,7 @@ const getRandomUsers = async query => {
     const res = await axiosConfig.get('/api/users/random', {
       params: query,
     })
-    return res.data
+    return res.data.data
   } catch (err) {
     console.log(err)
     throw err

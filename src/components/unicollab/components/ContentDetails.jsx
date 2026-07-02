@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const ContentDetails = ({ username, createdAt, edited, preview, className = "" }) => {
+const ContentDetails = ({ userId,username, createdAt, edited, preview, className = "" }) => {
   const formatTimeAgo = (date) => {
     const now = new Date();
     const diffInSeconds = Math.floor((now - new Date(date)) / 1000);
@@ -24,7 +24,7 @@ const ContentDetails = ({ username, createdAt, edited, preview, className = "" }
       {/* User info and timestamp */}
       <div className="flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400">
         <Link
-          to={`/unicollab/profile/${username}`}
+           to={`/unicollab/profile/${userId}`}
           className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium hover:underline"
           onClick={(e) => e.stopPropagation()}
         >

@@ -42,13 +42,24 @@ export const AuthProvider = ({ children }) => {
     ? 'http://localhost:5000'
     : 'https://innovit-backend.onrender.com')
 
+  // const login = (token, userData) => {
+  //   setToken(token)
+  //   setUser(userData)
+  //   setIsAuthenticated(true)
+  //   localStorage.setItem('token', token)
+  //   localStorage.setItem('user', JSON.stringify(userData))
+  // }
+
   const login = (token, userData) => {
-    setToken(token)
-    setUser(userData)
-    setIsAuthenticated(true)
-    localStorage.setItem('token', token)
-    localStorage.setItem('user', JSON.stringify(userData))
-  }
+  console.log('LOGIN USER DATA:', userData)
+
+  setToken(token)
+  setUser(userData)
+  setIsAuthenticated(true)
+
+  localStorage.setItem('token', token)
+  localStorage.setItem('user', JSON.stringify(userData))
+}
 
   const logout = () => {
     setToken(null)
@@ -124,6 +135,7 @@ export const AuthProvider = ({ children }) => {
         if (validationResult.valid && validationResult.user) {
           setToken(savedToken)
           setUser(validationResult.user)
+          console.log('AUTH USER:', validationResult.user)
           setIsAuthenticated(true)
 
           // Set up token expiration timeout

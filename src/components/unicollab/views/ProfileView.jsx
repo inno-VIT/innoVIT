@@ -17,30 +17,69 @@ const ProfileView = () => {
   const params = useParams()
   const { user: currentUser } = useAuth()
 
-  const fetchUser = async () => {
-    setLoading(true)
-    try {
-      const data = await getUser(params.userId)
-      if (data.error) {
-        setError(data.error)
-      } else {
-        setProfile(data)
-      }
-    } catch (err) {
-      setError('Failed to load profile')
-    } finally {
-      setLoading(false)
-    }
-  }
+  console.log("params:", params)
+console.log("currentUser:", currentUser)
 
-  useEffect(() => {
-    if (params.userId) {
-      fetchUser()
+  // const fetchUser = async () => {
+  //   setLoading(true)
+  //   try {
+  //     const data = await getUser(params.id)
+  //     if (data.error) {
+  //       setError(data.error)
+  //     } else {
+  //       setProfile(data)
+  //     }
+  //   } catch (err) {
+  //     setError('Failed to load profile')
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   if (params.id) {
+  //     fetchUser()
+  //   }
+  // }, [params.id])
+
+
+const fetchUser = async () => {
+  setLoading(true)
+
+  try {
+    const userId = params.id || currentUser?._id
+
+    console.log('Profile userId:', userId)
+
+    if (!userId) {
+      setError('No user ID found')
+      return
     }
-  }, [params.userId])
+
+    const data = await getUser(userId)
+
+    if (data.error) {
+      setError(data.error)
+    } else {
+      setProfile(data)
+    }
+  } catch (err) {
+    console.error(err)
+    setError('Failed to load profile')
+  } finally {
+    setLoading(false)
+  }
+}
+
+useEffect(() => {
+  fetchUser()
+}, [params.id, currentUser])
 
   // Check if this is the current user's profile
-  const isOwnProfile = currentUser && profile && currentUser._id === profile._id
+  const currentUserId = currentUser?.id || currentUser?._id
+const isOwnProfile =
+  profile &&
+  currentUserId === profile._id
 
   let tabs
   if (profile) {

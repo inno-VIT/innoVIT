@@ -12,6 +12,7 @@ const getUserDict = (token, user) => {
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
+    id: user._id,
     userId: user._id,
     bio: user.bio || '',
     avatar: user.avatar || '',
@@ -175,7 +176,7 @@ const login = async (req, res) => {
 const getUser = async (req, res) => {
   try {
     const userId = req.params.id
-    const currentUserId = req.user?.id
+    const currentUserId = req.user?.userId
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({
@@ -267,7 +268,7 @@ const getUser = async (req, res) => {
 const getUserPosts = async (req, res) => {
   try {
     const userId = req.params.id
-    const currentUserId = req.user?.id
+    const currentUserId = req.user?.userId
     const { page = 1, limit = 10 } = req.query
 
     const user = await User.findById(userId)
@@ -337,7 +338,7 @@ const getUserPosts = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const userId = req.user.id
+    const userId = req.user.userId
     const {
       username,
       firstName,
@@ -402,7 +403,7 @@ const updateUser = async (req, res) => {
 
 const follow = async (req, res) => {
   try {
-    const userId = req.user.id
+    const userId = req.user.userId
     const followingId = req.params.id
 
     if (userId === followingId) {
@@ -471,7 +472,7 @@ const follow = async (req, res) => {
 
 const unfollow = async (req, res) => {
   try {
-    const userId = req.user.id
+    const userId = req.user.userId
     const followingId = req.params.id
 
     const existingFollow = await Follow.findOne({ userId, followingId })
@@ -586,7 +587,7 @@ const getFollowing = async (req, res) => {
 const getRandomUsers = async (req, res) => {
   try {
     const { limit = 10 } = req.query
-    const currentUserId = req.user?.id
+    const currentUserId = req.user?.userId
 
     const users = await User.aggregate([
       {
@@ -686,7 +687,7 @@ const getPopularUsers = async (req, res) => {
 const getMutualFollows = async (req, res) => {
   try {
     const targetUserId = req.params.id
-    const currentUserId = req.user.id
+    const currentUserId = req.user.userId
 
     const mutuals = await Follow.getMutualFollows(currentUserId, targetUserId)
 
@@ -706,7 +707,7 @@ const getMutualFollows = async (req, res) => {
 
 const getSuggestions = async (req, res) => {
   try {
-    const userId = req.user.id
+    const userId = req.user.userId
     const { limit = 10 } = req.query
 
     const suggestions = await Follow.getSuggestions(userId, limit)

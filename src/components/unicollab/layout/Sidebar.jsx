@@ -190,7 +190,7 @@ const Sidebar = () => {
                 </div>
 
                 <Link
-                  to={`/unicollab/profile/${user?._id}`}
+                  to={`/unicollab/profile/${user?.id}`}
                   className="mb-2 flex items-center justify-center rounded-lg border border-slate-700 px-4 py-2 text-sm font-medium text-slate-300 transition hover:border-blue-500 hover:bg-slate-800 hover:text-white"
                 >
                   View Profile

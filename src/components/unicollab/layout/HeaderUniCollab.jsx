@@ -178,7 +178,7 @@ export default function HeaderUniCollab() {
 
               <>
                 <Link
-                  to={`/unicollab/profile/${user?._id}`}
+                  to={`/unicollab/profile/${user?.id}`}
                 >
                   <div
                     className="

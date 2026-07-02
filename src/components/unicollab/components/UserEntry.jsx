@@ -50,7 +50,7 @@ const UserEntry = ({ user }) => {
       </Link>
 
       {/* Follow Button */}
-      {currentUser && currentUser._id !== user._id && (
+      {currentUser && currentUser.id !== user._id && (
         <button
           onClick={handleFollow}
           disabled={isLoading}
