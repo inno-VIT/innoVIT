@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getMessages, sendMessage } from '../api/messages';
+import { getMessages, sendMessage } from '../../api/messages';
 import { useAuth } from '../../utils/AuthContext';
 import Loading from './Loading';
 import Message from './Message';
