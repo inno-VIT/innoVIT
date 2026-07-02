@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import UserAvatar from './UserAvatar'
+import UserAvatar from './profile/UserAvatar'
 import UserLikeModal from './UserLikeModal'
 
 const UserLikePreview = ({

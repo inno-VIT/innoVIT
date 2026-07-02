@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { UserPlus, UserCheck } from 'lucide-react'
-import { followUser, unfollowUser } from '../api/users'
-import { useAuth } from '../../../utils/AuthContext'
+import { followUser, unfollowUser } from '../../api/users'
+import { useAuth } from '../../../../utils/AuthContext'
 import UserAvatar from './UserAvatar' // Add this import
 
 const UserEntry = ({ user }) => {

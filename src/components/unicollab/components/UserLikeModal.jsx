@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { getUserLikes } from '../api/posts'
 import Loading from './shared/Loading'
-import UserEntry from './UserEntry'
+import UserEntry from '../components/profile/UserEntry'
 
 const UserLikeModal = ({ postId, open, setOpen }) => {
   const [userLikes, setUserLikes] = useState([])

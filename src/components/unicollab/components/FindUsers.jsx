@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 import { getRandomUsers } from '../api/users'
 import Loading from './shared/Loading'
-import UserEntry from './UserEntry'
+import UserEntry from '../components/profile/UserEntry'
 
 const FindUsers = () => {
   const [users, setUsers] = useState([])

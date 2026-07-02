@@ -1,4 +1,4 @@
-import UserAvatar from '../UserAvatar'
+import UserAvatar from '../profile/UserAvatar'
 
 const UserMessengerEntry = ({
   conservant,

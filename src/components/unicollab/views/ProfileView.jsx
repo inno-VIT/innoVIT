@@ -5,7 +5,7 @@ import Loading from '../components/shared/Loading'
 import ErrorAlert from '../components/shared/ErrorAlert'
 import { getUser } from '../api/users'
 import { useAuth } from '../../../utils/AuthContext'
-import ProfileTabs from '../components/ProfileTabs'
+import ProfileTabs from '../components/profile/ProfileTabs'
 import PostBrowser from '../components/PostBrowser'
 import CommentBrowser from '../components/comments/CommentBrowser'
 
