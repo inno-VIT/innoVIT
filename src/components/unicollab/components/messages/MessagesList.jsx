@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getMessages, sendMessage } from '../../api/messages';
-import { useAuth } from '../../utils/AuthContext';
-import Loading from './Loading';
+import { useAuth } from '../../../../utils/AuthContext';
+import Loading from '../shared/Loading';
 import Message from './Message';
 import MessageInput from './MessageInput';
 import { ArrowLeft, MessageCircle } from 'lucide-react';
