@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-// import Layout from '../layout/Layout'
 import UserMessengerEntries from '../components/messages/UserMessengerEntries'
 import MessagesList from '../components/messages/MessagesList'
 import { getConversations } from '../api/messages'
