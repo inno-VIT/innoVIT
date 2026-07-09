@@ -7,29 +7,31 @@ import RightSidebar from './RightSidebar'
 
 const UniCollabLayout = () => {
   return (
-    <div className="min-h-screen bg-[#080912] text-white">
-      {/* UniCollab Header */}
-      <HeaderUniCollab />
+    <div className="h-screen overflow-hidden bg-[#080912] text-white">
+      {/* Fixed Header */}
+      <div className="fixed top-0 left-0 right-0 z-50 h-16">
+        <HeaderUniCollab />
+      </div>
 
       {/* Main Layout */}
-      <div className="mx-auto flex max-w-[1800px]">
+      <div className="flex h-full pt-16">
 
         {/* Left Sidebar */}
         <Sidebar />
 
-        {/* Main Feed */}
+        {/* Feed */}
         <main
           className="
             flex-1
             min-w-0
-            pt-24
+            overflow-y-auto
             px-4
-            pb-10
+            py-8
             lg:ml-72
-            xl:mr-80
+            mr-0
           "
         >
-          <div className="mx-auto max-w-4xl">
+          <div className="w-full">
             <Outlet />
           </div>
         </main>
@@ -43,6 +45,57 @@ const UniCollabLayout = () => {
 }
 
 export default UniCollabLayout
+
+
+
+
+
+
+// // import React from 'react'
+// import { Outlet } from 'react-router-dom'
+
+// import HeaderUniCollab from './HeaderUniCollab'
+// import Sidebar from './Sidebar'
+// import RightSidebar from './RightSidebar'
+
+// const UniCollabLayout = () => {
+//   return (
+//     <div className="min-h-screen bg-[#080912] text-white">
+//       {/* UniCollab Header */}
+//       <HeaderUniCollab />
+
+//       {/* Main Layout */}
+//       <div className="mx-auto flex max-w-[1800px]">
+
+//         {/* Left Sidebar */}
+//         <Sidebar />
+
+//         {/* Main Feed */}
+//         <main
+//           className="
+//             flex-1
+//             min-w-0
+//             pt-24
+//             px-4
+//             pb-10
+//             lg:ml-72
+//             xl:mr-80
+//           "
+//         >
+//           <div className="mx-auto max-w-4xl">
+//             <Outlet />
+//           </div>
+//         </main>
+
+//         {/* Right Sidebar */}
+//         <RightSidebar />
+
+//       </div>
+//     </div>
+//   )
+// }
+
+// export default UniCollabLayout
 
 
 

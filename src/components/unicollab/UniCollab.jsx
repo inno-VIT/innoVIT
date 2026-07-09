@@ -162,7 +162,7 @@ const UniCollab = () => {
   }, [activeTab, relevantPosts, latestPosts, topPosts])
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
+    <div className="mx-auto max-w-6xl space-y-6">
       {/* Welcome Card */}
 
       <Card className="border border-slate-800 bg-[#10141d]">

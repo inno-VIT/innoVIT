@@ -39,7 +39,7 @@ export default function HeaderUniCollab() {
   return (
     <header
       className="
-        sticky
+        
         top-[72px]
         z-40
         border-b

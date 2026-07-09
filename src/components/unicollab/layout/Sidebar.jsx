@@ -93,7 +93,7 @@ const Sidebar = () => {
     <aside className="hidden lg:flex fixed left-0 top-16 h-[calc(100vh-64px)] w-72 border-r border-slate-800 bg-[#080912]">
       <div className="flex h-full w-full flex-col overflow-y-auto px-5 py-6">
 
-        {/* Profile */}
+        {/* Profile
 
         <div className="mb-8 flex items-center gap-3 rounded-xl border border-slate-800 bg-[#10141d] p-4">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-lg font-bold text-white">
@@ -109,7 +109,7 @@ const Sidebar = () => {
               {user?.email || 'Not signed in'}
             </p>
           </div>
-        </div>
+        </div> */}
 
         {/* Navigation */}
 
