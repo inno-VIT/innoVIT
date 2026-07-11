@@ -48,7 +48,7 @@ export default function HeaderUniCollab() {
         backdrop-blur-xl
       "
     >
-      <div className="mx-auto max-w-[1700px]">
+      <div className="mx-auto ">
 
         <div
           className="
