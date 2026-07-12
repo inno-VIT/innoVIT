@@ -20,7 +20,9 @@ const verifyToken = async (req, res, next) => {
     req.user = decoded // Store full user object
     req.userId = decoded.userId || decoded.id // Keep for backward compatibility
 
-    console.log('Token is present, user verified:', req.userId)
+    // console.log('Token is present, user verified:', req.userId)
+    console.log("Decoded JWT:");
+console.log(decoded);
     next()
   } catch (error) {
     console.log('Invalid token:', error.message)

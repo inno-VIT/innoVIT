@@ -7,7 +7,7 @@ const PostLike = require('../models/PostLike')
 const createPost = async (req, res) => {
   try {
     const { title, content, tags, isAnonymous, type } = req.body
-    const userId = req.user.id
+    const userId = req.userId
 
     if (!content || content.trim() === '') {
       return res.status(400).json({
@@ -110,8 +110,7 @@ const updatePost = async (req, res) => {
   try {
     const postId = req.params.id
     const { title, content, tags } = req.body
-    const userId = req.user.id
-
+    const userId = req.userId
     if (!content || content.trim() === '') {
       return res.status(400).json({
         success: false,
@@ -167,7 +166,7 @@ const updatePost = async (req, res) => {
 const deletePost = async (req, res) => {
   try {
     const postId = req.params.id
-    const userId = req.user.id
+    const userId = req.userId
 
     const post = await Post.findById(postId)
 
@@ -487,8 +486,7 @@ const getPostsByTag = async (req, res) => {
 const likePost = async (req, res) => {
   try {
     const postId = req.params.id
-    const userId = req.user.id
-
+    const userId = req.userId
     const post = await Post.findById(postId)
     if (!post) {
       return res.status(404).json({
@@ -522,7 +520,7 @@ const likePost = async (req, res) => {
 const unlikePost = async (req, res) => {
   try {
     const postId = req.params.id
-    const userId = req.user.id
+    const userId = req.userId
 
     const post = await Post.findById(postId)
     if (!post) {
@@ -713,8 +711,7 @@ const incrementViewCount = async (req, res) => {
 const togglePinPost = async (req, res) => {
   try {
     const postId = req.params.id
-    const userId = req.user.id
-
+    const userId = req.userId
     const post = await Post.findById(postId)
     if (!post) {
       return res.status(404).json({
@@ -818,8 +815,7 @@ const createComment = async (req, res) => {
   try {
     const postId = req.params.id
     const { content, parentId } = req.body
-    const userId = req.user.id
-
+    const userId = req.userId
     if (!content || content.trim() === '') {
       return res.status(400).json({
         success: false,
@@ -899,7 +895,7 @@ const updateComment = async (req, res) => {
   try {
     const commentId = req.params.id
     const { content } = req.body
-    const userId = req.user.id
+    const userId = req.userId
 
     if (!content || content.trim() === '') {
       return res.status(400).json({
@@ -957,7 +953,7 @@ const updateComment = async (req, res) => {
 const deleteComment = async (req, res) => {
   try {
     const commentId = req.params.id
-    const userId = req.user.id
+    const userId = req.userId
 
     const comment = await Comment.findById(commentId)
 
@@ -1009,7 +1005,7 @@ const deleteComment = async (req, res) => {
 const likeComment = async (req, res) => {
   try {
     const commentId = req.params.id
-    const userId = req.user.id
+    const userId = req.userId
 
     const comment = await Comment.findById(commentId)
     if (!comment) {
@@ -1053,7 +1049,7 @@ const likeComment = async (req, res) => {
 const unlikeComment = async (req, res) => {
   try {
     const commentId = req.params.id
-    const userId = req.user.id
+    const userId = req.userId
 
     const comment = await Comment.findById(commentId)
     if (!comment) {

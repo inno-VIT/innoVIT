@@ -8,7 +8,7 @@ import { useAuth } from '../../../../utils/AuthContext'
 import Loading from '../shared/Loading'
 import PostCard from './PostCard'
 import SortBySelect from '../SortBySelect'
-import CreatePost from '../../../post/CreatePost'
+import CreatePost from './CreatePost'
 
 const PostBrowser = ({
   createPost = false,

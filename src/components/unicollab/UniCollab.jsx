@@ -9,8 +9,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '../ui/Tabs'
 import { Card, CardContent, CardHeader } from '../ui/Card'
 import { Button } from '../ui/Button'
 
-import CreatePost from '../post/CreatePost'
-import Post from '../post/Post'
+import CreatePost from './components/feed/CreatePost'
+import Post from './components/feed/Post'
 
 import {
   Home,

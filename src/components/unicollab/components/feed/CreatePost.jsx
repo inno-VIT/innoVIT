@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import { ImageIcon, X, PlusCircle } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-import { Button } from '../ui/Button'
-import { Textarea } from '../ui/TextArea'
+import { Button } from '../../../ui/Button'
+import { Textarea } from '../../../ui/TextArea'
 
-import { createPost } from '../unicollab/api/posts'
-import { useAuth } from '../../utils/AuthContext'
+import { createPost } from '../../api/posts'
+import { useAuth } from '../../../../utils/AuthContext'
 
 const CreatePost = ({ onPostCreate }) => {
   const navigate = useNavigate()
