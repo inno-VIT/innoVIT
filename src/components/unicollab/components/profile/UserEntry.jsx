@@ -6,7 +6,13 @@ import { useAuth } from '../../../../utils/AuthContext'
 import UserAvatar from './UserAvatar' // Add this import
 
 const UserEntry = ({ user }) => {
-  const [isFollowing, setIsFollowing] = useState(user.isFollowing || false)
+  if (!user) return null
+
+  const [isFollowing, setIsFollowing] = useState(
+    user?.isFollowing ?? false,
+  )
+// const UserEntry = ({ user }) => {
+//   const [isFollowing, setIsFollowing] = useState(user.isFollowing || false)
   const [isLoading, setIsLoading] = useState(false)
   const { user: currentUser } = useAuth()
 
@@ -32,7 +38,7 @@ const UserEntry = ({ user }) => {
   return (
     <div className='flex items-center justify-between group'>
       <Link
-        to={`/unicollab/profile/${user._id}`}
+        to={`/unicollab/profile/${user?._id || user?.id}`}
         className='flex items-center gap-3 flex-1 min-w-0 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg p-2 transition-colors'
       >
         {/* Replace the custom avatar with UserAvatar component */}
@@ -50,7 +56,7 @@ const UserEntry = ({ user }) => {
       </Link>
 
       {/* Follow Button */}
-      {currentUser && currentUser.id !== user._id && (
+      {currentUser && (currentUser._id || currentUser.id) !== user._id && (
         <button
           onClick={handleFollow}
           disabled={isLoading}

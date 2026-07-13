@@ -177,9 +177,7 @@ export default function HeaderUniCollab() {
             {isAuthenticated && (
 
               <>
-                <Link
-                  to={`/unicollab/profile/${user?.id}`}
-                >
+                <Link to={`/unicollab/profile/${user?._id || user?.id}`}>
                   <div
                     className="
                       h-10

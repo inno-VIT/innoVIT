@@ -25,9 +25,9 @@ router.post('/send-otp', async (req, res) => {
       message: 'Email is required',
     })
   }
+  const otp = Math.floor(100000 + Math.random() * 900000).toString()
 
   try {
-    const otp = Math.floor(100000 + Math.random() * 900000).toString()
     console.log('Generated OTP for', email, ':', otp)
 
     // Delete existing OTP for this email

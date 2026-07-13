@@ -133,12 +133,13 @@ const FindUsers = () => {
                     delay: index * 0.05,
                   }}
                 >
-                  <UserEntry
+                  {/* <UserEntry
                     userId={user._id}
                     username={user.username}
                     avatar={user.avatar}
                     bio={user.bio}
-                  />
+                  /> */}
+                  <UserEntry user={user} />
                 </motion.div>
               ))}
             </div>
