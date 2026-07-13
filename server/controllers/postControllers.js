@@ -15,6 +15,7 @@ const createPost = async (req, res) => {
         message: 'Post content is required',
       })
     }
+    
 
     const post = await Post.create({
       title: title?.trim() || '',
@@ -30,26 +31,66 @@ const createPost = async (req, res) => {
       $inc: { postCount: 1 },
     })
 
-    // Populate author info
-    await Post.populate(post, {
+    const populatedPost = await Post.findById(post._id).populate({
       path: 'author',
       select: 'username firstName lastName avatar email',
     })
 
-    return res.status(201).json({
-      success: true,
-      message: 'Post created successfully',
-      data: post.toAPIJSON(userId),
-    })
-  } catch (err) {
-    console.error('Create post error:', err)
-    return res.status(500).json({
-      success: false,
-      message: 'Internal server error',
-      error: err.message,
-    })
-  }
+const postData = populatedPost.toAPIJSON(userId)
+
+// Resolve async value before sending response
+postData.userLiked = await populatedPost.isLikedBy(userId)
+
+return res.status(201).json({
+  success: true,
+  message: 'Post created successfully',
+  data: postData,
+})
+} catch (err) {
+  console.error('========== CREATE POST ERROR ==========')
+  console.error(err)
+  console.error(err.stack)
+
+  return res.status(500).json({
+    success: false,
+    message: err.message,
+  })
 }
+}
+
+//     const populatedPost = await Post.findById(post._id)
+//     .populate({
+//       path: 'author',
+//       select: 'username firstName lastName avatar email',
+//     })
+//     .populate({
+//       path: 'likes',
+//       select: 'username firstName lastName avatar',
+//     })
+//     .populate({
+//       path: 'comments',
+//     })
+
+//     // // Populate author info
+//     // await Post.populate(post, {
+//     //   path: 'author',
+//     //   select: 'username firstName lastName avatar email',
+//     // })
+
+//     return res.status(201).json({
+//       success: true,
+//       message: 'Post created successfully',
+//       data: populatedPost.toAPIJSON(userId),
+//     })
+//   } catch (err) {
+//     console.error('Create post error:', err)
+//     return res.status(500).json({
+//       success: false,
+//       message: 'Internal server error',
+//       error: err.message,
+//     })
+//   }
+// }
 
 const getPost = async (req, res) => {
   try {

@@ -46,6 +46,8 @@ const CreatePost = ({ onPostCreate }) => {
     if (input) input.value = ''
   }
 
+  
+
   const handleImage = e => {
     const file = e.target.files[0]
 
@@ -104,8 +106,7 @@ const CreatePost = ({ onPostCreate }) => {
         user,
       )
 
-      onPostCreate?.(newPost)
-
+      onPostCreate?.(newPost.data)
       resetForm()
     } catch (err) {
       console.error(err)

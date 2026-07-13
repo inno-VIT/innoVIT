@@ -248,14 +248,26 @@ postSchema.methods.toAPIJSON = function (userId = null) {
   }
 
   // Add user-specific data
-  if (userId) {
-    basePost.userLiked = this.isLikedBy(userId)
-    basePost.canEdit =
-      this.author._id?.toString() === userId.toString() ||
-      this.author.toString() === userId.toString()
-    basePost.canDelete = basePost.canEdit
-  }
+  // if (userId) {
+  //   basePost.userLiked = this.isLikedBy(userId)
+  //   basePost.canEdit =
+  //     this.author._id?.toString() === userId.toString() ||
+  //     this.author.toString() === userId.toString()
+  //   basePost.canDelete = basePost.canEdit
+  // }
 
+  if (userId) {
+  const authorId =
+    this.author && this.author._id
+      ? this.author._id.toString()
+      : this.author.toString()
+
+  basePost.canEdit = authorId === userId.toString()
+  basePost.canDelete = basePost.canEdit
+
+  // compute userLiked separately in controller
+  basePost.userLiked = false
+}
   return basePost
 }
 
