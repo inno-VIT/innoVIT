@@ -228,48 +228,18 @@ followSchema.pre('save', function (next) {
   next()
 })
 
-// Post-save middleware to update user follower/following counts
-followSchema.post('save', async function (doc, next) {
-  try {
-    const User = mongoose.model('User')
+// // Post-save middleware to update user follower/following counts
+// // Counts are maintained in userControllers.js.
+// // Keep this middleware empty to avoid double increments.
+// followSchema.post('save', function (doc, next) {
+//   next()
+// })
 
-    if (doc.status === 'accepted') {
-      // Update follower count for the user being followed
-      await User.findByIdAndUpdate(doc.followingId, {
-        $inc: { followerCount: 1 },
-      })
-
-      // Update following count for the user who is following
-      await User.findByIdAndUpdate(doc.userId, {
-        $inc: { followingCount: 1 },
-      })
-    }
-  } catch (error) {
-    console.error('Error updating user counts after follow:', error)
-  }
-  next()
-})
-
-// Post-remove middleware to update user follower/following counts
-followSchema.post('findOneAndDelete', async function (doc, next) {
-  if (doc && doc.status === 'accepted') {
-    try {
-      const User = mongoose.model('User')
-
-      // Decrement follower count for the user being unfollowed
-      await User.findByIdAndUpdate(doc.followingId, {
-        $inc: { followerCount: -1 },
-      })
-
-      // Decrement following count for the user who unfollowed
-      await User.findByIdAndUpdate(doc.userId, {
-        $inc: { followingCount: -1 },
-      })
-    } catch (error) {
-      console.error('Error updating user counts after unfollow:', error)
-    }
-  }
-  next()
-})
+// // Post-remove middleware to update user follower/following counts
+// // Counts are maintained in userControllers.js.
+// // Keep this middleware empty to avoid double decrements.
+// followSchema.post('findOneAndDelete', function (doc, next) {
+//   next()
+// })
 
 module.exports = mongoose.model('Follow', followSchema)
