@@ -41,7 +41,7 @@ const updateUser = async (user, data) => {
 const followUser = async (userId, currentUser) => {
   try {
     const res = await axiosConfig.post(
-      `/api/users/follow/${userId}`,
+      `/api/users/${userId}/follow`,
       {},
       {
         headers: {
@@ -49,6 +49,7 @@ const followUser = async (userId, currentUser) => {
         },
       },
     )
+
     return res.data
   } catch (err) {
     console.log(err)
@@ -58,11 +59,15 @@ const followUser = async (userId, currentUser) => {
 
 const unfollowUser = async (userId, currentUser) => {
   try {
-    const res = await axiosConfig.delete(`/api/users/follow/${userId}`, {
-      headers: {
-        'x-access-token': currentUser.token,
+    const res = await axiosConfig.delete(
+      `/api/users/${userId}/follow`,
+      {
+        headers: {
+          'x-access-token': currentUser.token,
+        },
       },
-    })
+    )
+
     return res.data
   } catch (err) {
     console.log(err)
