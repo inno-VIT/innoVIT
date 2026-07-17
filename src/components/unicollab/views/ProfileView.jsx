@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-// import Layout from '../layout/Layout'
 import Loading from '../components/shared/Loading'
 import ErrorAlert from '../components/shared/ErrorAlert'
-import { getUser } from '../api/users'
+import {
+  getUser,
+  followUser,
+  unfollowUser,
+} from '../api/users'
 import { useAuth } from '../../../utils/AuthContext'
 import ProfileTabs from '../components/profile/ProfileTabs'
 import PostBrowser from '../components/feed/PostBrowser'
@@ -14,159 +17,206 @@ const ProfileView = () => {
   const [profile, setProfile] = useState(null)
   const [tab, setTab] = useState('posts')
   const [error, setError] = useState('')
+
+  const [isFollowing, setIsFollowing] = useState(false)
+  const [followLoading, setFollowLoading] = useState(false)
+
   const params = useParams()
   const { user: currentUser } = useAuth()
 
-  console.log("params:", params)
-console.log("currentUser:", currentUser)
+  const fetchUser = async () => {
+    setLoading(true)
 
-  // const fetchUser = async () => {
-  //   setLoading(true)
-  //   try {
-  //     const data = await getUser(params.id)
-  //     if (data.error) {
-  //       setError(data.error)
-  //     } else {
-  //       setProfile(data)
-  //     }
-  //   } catch (err) {
-  //     setError('Failed to load profile')
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }
+    try {
+      const userId = params.id || currentUser?._id || currentUser?.id
 
-  // useEffect(() => {
-  //   if (params.id) {
-  //     fetchUser()
-  //   }
-  // }, [params.id])
+      if (!userId) {
+        setError('No user ID found')
+        return
+      }
 
+      const data = await getUser(userId)
 
-const fetchUser = async () => {
-  setLoading(true)
-
-  try {
-    const userId = params.id || currentUser?._id
-
-    console.log('Profile userId:', userId)
-
-    if (!userId) {
-      setError('No user ID found')
-      return
+      if (data.error) {
+        setError(data.error)
+      } else {
+        setProfile(data)
+        setIsFollowing(data.isFollowing || false)
+      }
+    } catch (err) {
+      console.error(err)
+      setError('Failed to load profile')
+    } finally {
+      setLoading(false)
     }
-
-    const data = await getUser(userId)
-
-    if (data.error) {
-      setError(data.error)
-    } else {
-      setProfile(data)
-    }
-  } catch (err) {
-    console.error(err)
-    setError('Failed to load profile')
-  } finally {
-    setLoading(false)
   }
-}
 
-useEffect(() => {
-  fetchUser()
-}, [params.id, currentUser])
+  useEffect(() => {
+    fetchUser()
+  }, [params.id, currentUser])
 
-  // Check if this is the current user's profile
+  useEffect(() => {
+    if (profile) {
+      setIsFollowing(profile.isFollowing || false)
+    }
+  }, [profile])
+
+  const handleFollow = async () => {
+    if (!currentUser || !profile) return
+
+    try {
+      setFollowLoading(true)
+
+      if (isFollowing) {
+        await unfollowUser(profile._id, currentUser)
+
+        setIsFollowing(false)
+
+        setProfile(prev => ({
+          ...prev,
+          followerCount: Math.max(
+            0,
+            (prev.followerCount || 0) - 1,
+          ),
+        }))
+      } else {
+        await followUser(profile._id, currentUser)
+
+        setIsFollowing(true)
+
+        setProfile(prev => ({
+          ...prev,
+          followerCount: (prev.followerCount || 0) + 1,
+        }))
+      }
+    } catch (err) {
+      console.error('Follow error:', err)
+    } finally {
+      setFollowLoading(false)
+    }
+  }
+
   const currentUserId = currentUser?.id || currentUser?._id
-const isOwnProfile =
-  profile &&
-  currentUserId === profile._id
+
+  const isOwnProfile =
+    profile &&
+    currentUserId &&
+    currentUserId.toString() === profile._id.toString()
 
   let tabs
+
   if (profile) {
     tabs = {
-      posts: <PostBrowser profileUser={profile} contentType='posts' />,
-      liked: <PostBrowser profileUser={profile} contentType='liked' />,
-      comments: <CommentBrowser profileUser={profile} />,
+      posts: (
+        <PostBrowser
+          profileUser={profile}
+          contentType="posts"
+        />
+      ),
+      liked: (
+        <PostBrowser
+          profileUser={profile}
+          contentType="liked"
+        />
+      ),
+      comments: (
+        <CommentBrowser profileUser={profile} />
+      ),
     }
   }
 
   return (
-    <>
-      <div className='max-w-6xl mx-auto'>
-        {loading ? (
-          <Loading />
-        ) : profile ? (
-          <div className='space-y-6'>
-            {/* Profile Header */}
-            <div className='bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6'>
-              <div className='flex items-center space-x-4'>
-                <div className='w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold'>
-                  {profile.firstName?.charAt(0) || 'U'}
-                </div>
-                <div className='flex-1'>
-                  <h1 className='text-2xl font-bold text-gray-900 dark:text-white'>
-                    {profile.firstName} {profile.lastName}
-                  </h1>
-                  <p className='text-gray-600 dark:text-gray-400'>
-                    @{profile.username}
+    <div className="max-w-6xl mx-auto">
+      {loading ? (
+        <Loading />
+      ) : profile ? (
+        <div className="space-y-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div className="flex items-center space-x-4">
+              <div className="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                {profile.firstName?.charAt(0) || 'U'}
+              </div>
+
+              <div className="flex-1">
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {profile.firstName} {profile.lastName}
+                </h1>
+
+                <p className="text-gray-600 dark:text-gray-400">
+                  @{profile.username}
+                </p>
+
+                {profile.bio && (
+                  <p className="text-gray-700 dark:text-gray-300 mt-2">
+                    {profile.bio}
                   </p>
-                  {profile.bio && (
-                    <p className='text-gray-700 dark:text-gray-300 mt-2'>
-                      {profile.bio}
-                    </p>
-                  )}
-                </div>
-                {!isOwnProfile && (
-                  <button className='bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors'>
-                    Follow
-                  </button>
                 )}
               </div>
 
-              {/* Stats */}
-              <div className='flex space-x-6 mt-4 pt-4 border-t border-gray-200 dark:border-gray-600'>
-                <div className='text-center'>
-                  <div className='text-lg font-bold text-gray-900 dark:text-white'>
-                    {profile.followerCount || 0}
-                  </div>
-                  <div className='text-sm text-gray-600 dark:text-gray-400'>
-                    Followers
-                  </div>
+              {!isOwnProfile && (
+                <button
+                  onClick={handleFollow}
+                  disabled={followLoading}
+                  className={`px-4 py-2 rounded-md text-white transition-colors disabled:opacity-60 ${
+                    isFollowing
+                      ? 'bg-gray-600 hover:bg-gray-700'
+                      : 'bg-blue-600 hover:bg-blue-700'
+                  }`}
+                >
+                  {followLoading
+                    ? 'Please wait...'
+                    : isFollowing
+                    ? 'Following'
+                    : 'Follow'}
+                </button>
+              )}
+            </div>
+
+            <div className="flex space-x-6 mt-4 pt-4 border-t border-gray-200 dark:border-gray-600">
+              <div className="text-center">
+                <div className="text-lg font-bold text-gray-900 dark:text-white">
+                  {profile.followerCount || 0}
                 </div>
-                <div className='text-center'>
-                  <div className='text-lg font-bold text-gray-900 dark:text-white'>
-                    {profile.followingCount || 0}
-                  </div>
-                  <div className='text-sm text-gray-600 dark:text-gray-400'>
-                    Following
-                  </div>
+
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Followers
                 </div>
-                <div className='text-center'>
-                  <div className='text-lg font-bold text-gray-900 dark:text-white'>
-                    {profile.postCount || 0}
-                  </div>
-                  <div className='text-sm text-gray-600 dark:text-gray-400'>
-                    Posts
-                  </div>
+              </div>
+
+              <div className="text-center">
+                <div className="text-lg font-bold text-gray-900 dark:text-white">
+                  {profile.followingCount || 0}
+                </div>
+
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Following
+                </div>
+              </div>
+
+              <div className="text-center">
+                <div className="text-lg font-bold text-gray-900 dark:text-white">
+                  {profile.postCount || 0}
+                </div>
+
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Posts
                 </div>
               </div>
             </div>
-
-            {/* Profile Tabs */}
-            <ProfileTabs
-              tab={tab}
-              setTab={setTab}
-              isOwnProfile={isOwnProfile}
-            />
-
-            {/* Tab Content */}
-            {tabs && tabs[tab]}
           </div>
-        ) : (
-          error && <ErrorAlert error={error} />
-        )}
-      </div>
-    </>
+
+          <ProfileTabs
+            tab={tab}
+            setTab={setTab}
+            isOwnProfile={isOwnProfile}
+          />
+
+          {tabs && tabs[tab]}
+        </div>
+      ) : (
+        error && <ErrorAlert error={error} />
+      )}
+    </div>
   )
 }
 
