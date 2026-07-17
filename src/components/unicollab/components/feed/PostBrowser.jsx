@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
 import { RefreshCw, ArrowUp } from 'lucide-react'
 
-import { getPosts, getUserLikedPosts } from '../../api/posts'
+import {
+  getPosts,
+  getUserLikedPosts,
+  getUserPosts,
+} from '../../api/posts'
 import { useAuth } from '../../../../utils/AuthContext'
 
 import Loading from '../shared/Loading'
@@ -36,6 +40,8 @@ const PostBrowser = ({
     searchParams.get('search') ||
     ''
 
+  const isProfilePage = location.pathname.startsWith('/unicollab/profile')
+
   const contentTypeSorts = {
     posts: {
       '-createdAt': 'Latest',
@@ -62,10 +68,6 @@ const PostBrowser = ({
         sortBy,
       }
 
-      if (profileUser?._id) {
-        query.author = profileUser._id
-      }
-
       if (searchQuery) {
         query.search = searchQuery
       }
@@ -78,11 +80,21 @@ const PostBrowser = ({
           token,
           query,
         )
+      } else if (isProfilePage && profileUser?._id) {
+        res = await getUserPosts(
+          profileUser._id,
+          token,
+          query,
+        )
       } else {
         res = await getPosts(token, query)
       }
 
-      const fetchedPosts = res.posts || res.data || []
+      const fetchedPosts =
+        res.posts ||
+        res.data ||
+        res.results ||
+        []
 
       if (loadMore) {
         setPosts(prev => [...prev, ...fetchedPosts])
@@ -92,7 +104,12 @@ const PostBrowser = ({
         setPage(1)
       }
 
-      setCount(res.total || fetchedPosts.length)
+      setCount(
+        res.total ||
+          res.count ||
+          fetchedPosts.length,
+      )
+
       setHasMore(fetchedPosts.length >= 10)
     } catch (err) {
       console.error(err)
@@ -104,7 +121,12 @@ const PostBrowser = ({
 
   useEffect(() => {
     fetchPosts(false)
-  }, [sortBy, contentType, profileUser?._id])
+  }, [
+    sortBy,
+    contentType,
+    profileUser?._id,
+    location.pathname,
+  ])
 
   useEffect(() => {
     fetchPosts(false)
@@ -134,7 +156,8 @@ const PostBrowser = ({
   }
 
   const sorts =
-    contentTypeSorts[contentType] || contentTypeSorts.posts
+    contentTypeSorts[contentType] ||
+    contentTypeSorts.posts
 
   if (loading) {
     return (
@@ -146,15 +169,9 @@ const PostBrowser = ({
 
   return (
     <div className={`space-y-5 ${className}`}>
-
-      {/* Top Toolbar */}
-
       <div className="rounded-2xl border border-slate-800 bg-[#10141d] p-5">
-
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-
           <div>
-
             {searchQuery ? (
               <>
                 <h2 className="text-xl font-semibold text-white">
@@ -168,19 +185,21 @@ const PostBrowser = ({
             ) : (
               <>
                 <h2 className="text-xl font-semibold text-white">
-                  Community Feed
+                  {isProfilePage && profileUser
+                    ? `${profileUser.firstName}'s Posts`
+                    : 'Community Feed'}
                 </h2>
 
                 <p className="mt-1 text-sm text-slate-400">
-                  Discover discussions from your university.
+                  {isProfilePage
+                    ? 'Posts created by this user.'
+                    : 'Discover discussions from your university.'}
                 </p>
               </>
             )}
-
           </div>
 
           <div className="flex items-center gap-3">
-
             <button
               onClick={handleRefresh}
               className="rounded-xl border border-slate-700 p-2 transition hover:border-blue-500 hover:bg-slate-800"
@@ -193,20 +212,14 @@ const PostBrowser = ({
               onSortChange={setSortBy}
               sorts={sorts}
             />
-
           </div>
-
         </div>
-
       </div>
 
       {createPost && <CreatePost />}
 
-      {/* Posts */}
-
       {posts.length === 0 ? (
         <div className="rounded-2xl border border-slate-800 bg-[#10141d] py-20 text-center">
-
           <h3 className="text-lg font-semibold text-white">
             {searchQuery
               ? 'No posts found'
@@ -218,7 +231,6 @@ const PostBrowser = ({
               ? 'Try searching for something else.'
               : 'Be the first person to start a discussion.'}
           </p>
-
         </div>
       ) : (
         <>
@@ -234,7 +246,6 @@ const PostBrowser = ({
 
           {hasMore && (
             <div className="flex justify-center pt-4">
-
               <button
                 onClick={handleLoadMore}
                 disabled={loadingMore}
@@ -244,13 +255,11 @@ const PostBrowser = ({
                   ? 'Loading...'
                   : 'Load More'}
               </button>
-
             </div>
           )}
 
           {!hasMore && posts.length > 0 && (
             <div className="py-10 text-center">
-
               <p className="text-slate-400">
                 You've reached the end.
               </p>
@@ -262,12 +271,10 @@ const PostBrowser = ({
                 <ArrowUp className="h-4 w-4" />
                 Back to Top
               </button>
-
             </div>
           )}
         </>
       )}
-
     </div>
   )
 }

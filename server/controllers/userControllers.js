@@ -1,6 +1,7 @@
 const User = require('../models/Users')
 const Post = require('../models/Posts')
 const Follow = require('../models/Follow')
+const PostLike = require('../models/PostLike')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
