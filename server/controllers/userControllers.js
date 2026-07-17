@@ -637,6 +637,74 @@ const getRandomUsers = async (req, res) => {
   }
 }
 
+const getUsers = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1
+    const limit = parseInt(req.query.limit) || 20
+
+    const skip = (page - 1) * limit
+    const currentUserId = req.user?.userId
+
+    // Don't include the logged-in user
+    const query = {
+      isActive: true,
+    }
+
+    if (currentUserId) {
+      query._id = {
+        $ne: new mongoose.Types.ObjectId(currentUserId),
+      }
+    }
+
+    const [users, total] = await Promise.all([
+      User.find(query)
+        .select('-password')
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
+
+      User.countDocuments(query),
+    ])
+
+    // Add follow status
+    if (currentUserId && users.length > 0) {
+      const follows = await Follow.find({
+        userId: currentUserId,
+        followingId: {
+          $in: users.map(user => user._id),
+        },
+        status: 'accepted',
+      })
+
+      const followingSet = new Set(
+        follows.map(f => f.followingId.toString()),
+      )
+
+      users.forEach(user => {
+        user._doc.isFollowing = followingSet.has(
+          user._id.toString(),
+        )
+      })
+    }
+
+    return res.status(200).json({
+      success: true,
+      users,
+      page,
+      total,
+      hasMore: skip + users.length < total,
+    })
+  } catch (err) {
+    console.error('Get users error:', err)
+
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+      error: err.message,
+    })
+  }
+}
+
 const searchUsers = async (req, res) => {
   try {
     const { q: query, limit = 20 } = req.query
@@ -772,6 +840,7 @@ module.exports = {
   getFollowers,
   getFollowing,
   getUser,
+  getUsers,       // explort user function
   getRandomUsers,
   updateUser,
   searchUsers,

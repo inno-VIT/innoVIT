@@ -52,6 +52,10 @@ router.get('/search', userControllers.searchUsers)
 // @access  Public
 router.get('/popular', userControllers.getPopularUsers)
 
+
+
+router.get('/', optionallyVerifyToken, userControllers.getUsers)
+
 // @route   GET /api/users/:id
 // @desc    Get user profile by ID
 // @access  Public
