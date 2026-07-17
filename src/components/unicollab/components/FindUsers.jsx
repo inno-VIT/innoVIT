@@ -147,7 +147,7 @@ const FindUsers = () => {
         )}
 
         <Link
-          to="/unicollab/search"
+          to="/unicollab/users"
           className="mt-5 flex items-center justify-center rounded-lg border border-slate-700 px-4 py-2 text-sm font-medium text-slate-300 transition hover:border-blue-500 hover:bg-slate-800 hover:text-white"
         >
           View All Users

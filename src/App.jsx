@@ -26,6 +26,7 @@ import TermsOfService from './components/unicollab/about-platform/TermsOfService
 // UniCollab
 import UniCollab from './components/unicollab/UniCollab.jsx'
 import ExploreView from './components/unicollab/views/ExploreView.jsx'
+import UsersView from './components/unicollab/views/UsersView.jsx'
 import PostView from './components/unicollab/views/PostView.jsx'
 import CreatePostPage from './components/unicollab/views/CreatePostPage.jsx'
 import ProfileView from './components/unicollab/views/ProfileView.jsx'
@@ -88,6 +89,9 @@ const App = () => {
 
           {/* Explore */}
           <Route path="explore" element={<ExploreView />} />
+
+          {/* All Users */}
+          <Route path="users" element={<UsersView />} />
 
           {/* Search */}
           <Route path="search" element={<SearchView />} />
