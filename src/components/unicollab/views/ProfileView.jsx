@@ -40,8 +40,13 @@ const ProfileView = () => {
       if (data.error) {
         setError(data.error)
       } else {
-        setProfile(data)
-        setIsFollowing(data.isFollowing || false)
+        setProfile({
+          ...data,
+        })
+        setIsFollowing(Boolean(data.isFollowing))
+
+        // setProfile(data)
+        // setIsFollowing(data.isFollowing || false)
       }
     } catch (err) {
       console.error(err)
@@ -55,46 +60,48 @@ const ProfileView = () => {
     fetchUser()
   }, [params.id, currentUser])
 
-  useEffect(() => {
-    if (profile) {
-      setIsFollowing(profile.isFollowing || false)
-    }
-  }, [profile])
+  // useEffect(() => {
+  //   if (profile) {
+  //     setIsFollowing(profile.isFollowing || false)
+  //   }
+  // }, [profile])
 
   const handleFollow = async () => {
-    if (!currentUser || !profile) return
+  if (!currentUser || !profile) return
 
-    try {
-      setFollowLoading(true)
+  try {
+    setFollowLoading(true)
 
-      if (isFollowing) {
-        await unfollowUser(profile._id, currentUser)
+    if (isFollowing) {
+      await unfollowUser(profile._id, currentUser)
 
-        setIsFollowing(false)
+      setIsFollowing(false)
 
-        setProfile(prev => ({
-          ...prev,
-          followerCount: Math.max(
-            0,
-            (prev.followerCount || 0) - 1,
-          ),
-        }))
-      } else {
-        await followUser(profile._id, currentUser)
+      setProfile(prev => ({
+        ...prev,
+        isFollowing: false,
+        followerCount: Math.max(
+          0,
+          (prev?.followerCount || 0) - 1,
+        ),
+      }))
+    } else {
+      await followUser(profile._id, currentUser)
 
-        setIsFollowing(true)
+      setIsFollowing(true)
 
-        setProfile(prev => ({
-          ...prev,
-          followerCount: (prev.followerCount || 0) + 1,
-        }))
-      }
-    } catch (err) {
-      console.error('Follow error:', err)
-    } finally {
-      setFollowLoading(false)
+      setProfile(prev => ({
+        ...prev,
+        isFollowing: true,
+        followerCount: (prev?.followerCount || 0) + 1,
+      }))
     }
+  } catch (err) {
+    console.error('Follow error:', err)
+  } finally {
+    setFollowLoading(false)
   }
+}
 
   const currentUserId = currentUser?.id || currentUser?._id
 
