@@ -40,13 +40,8 @@ const ProfileView = () => {
       if (data.error) {
         setError(data.error)
       } else {
-        setProfile({
-          ...data,
-        })
+        setProfile(data)
         setIsFollowing(Boolean(data.isFollowing))
-
-        // setProfile(data)
-        // setIsFollowing(data.isFollowing || false)
       }
     } catch (err) {
       console.error(err)
@@ -60,48 +55,55 @@ const ProfileView = () => {
     fetchUser()
   }, [params.id, currentUser])
 
-  // useEffect(() => {
-  //   if (profile) {
-  //     setIsFollowing(profile.isFollowing || false)
-  //   }
-  // }, [profile])
+  useEffect(() => {
+    if (profile) {
+      setIsFollowing(Boolean(profile.isFollowing))
+    }
+  }, [profile?.isFollowing])
 
   const handleFollow = async () => {
-  if (!currentUser || !profile) return
+    if (!currentUser || !profile || followLoading) return
 
-  try {
-    setFollowLoading(true)
+    const wasFollowing = isFollowing
 
-    if (isFollowing) {
-      await unfollowUser(profile._id, currentUser)
+    // Optimistic UI update
+    setIsFollowing(!wasFollowing)
 
-      setIsFollowing(false)
+    setProfile(prev => ({
+      ...prev,
+      isFollowing: !wasFollowing,
+      followerCount: Math.max(
+        0,
+        (prev?.followerCount || 0) + (wasFollowing ? -1 : 1),
+      ),
+    }))
+
+    try {
+      setFollowLoading(true)
+
+      if (wasFollowing) {
+        await unfollowUser(profile._id, currentUser)
+      } else {
+        await followUser(profile._id, currentUser)
+      }
+    } catch (err) {
+      console.error('Follow error:', err)
+
+      // Rollback on failure
+      setIsFollowing(wasFollowing)
 
       setProfile(prev => ({
         ...prev,
-        isFollowing: false,
+        isFollowing: wasFollowing,
         followerCount: Math.max(
           0,
-          (prev?.followerCount || 0) - 1,
+          (prev?.followerCount || 0) + (wasFollowing ? 1 : -1),
         ),
       }))
-    } else {
-      await followUser(profile._id, currentUser)
-
-      setIsFollowing(true)
-
-      setProfile(prev => ({
-        ...prev,
-        isFollowing: true,
-        followerCount: (prev?.followerCount || 0) + 1,
-      }))
+    } finally {
+      setFollowLoading(false)
     }
-  } catch (err) {
-    console.error('Follow error:', err)
-  } finally {
-    setFollowLoading(false)
   }
-}
 
   const currentUserId = currentUser?.id || currentUser?._id
 
@@ -154,7 +156,7 @@ const ProfileView = () => {
                 </p>
 
                 {profile.bio && (
-                  <p className="text-gray-700 dark:text-gray-300 mt-2">
+                  <p className="mt-2 text-gray-700 dark:text-gray-300">
                     {profile.bio}
                   </p>
                 )}
@@ -164,7 +166,7 @@ const ProfileView = () => {
                 <button
                   onClick={handleFollow}
                   disabled={followLoading}
-                  className={`px-4 py-2 rounded-md text-white transition-colors disabled:opacity-60 ${
+                  className={`rounded-md px-4 py-2 text-white transition-colors disabled:opacity-60 ${
                     isFollowing
                       ? 'bg-gray-600 hover:bg-gray-700'
                       : 'bg-blue-600 hover:bg-blue-700'
@@ -179,10 +181,10 @@ const ProfileView = () => {
               )}
             </div>
 
-            <div className="flex space-x-6 mt-4 pt-4 border-t border-gray-200 dark:border-gray-600">
+            <div className="mt-4 flex space-x-6 border-t border-gray-200 pt-4 dark:border-gray-600">
               <div className="text-center">
                 <div className="text-lg font-bold text-gray-900 dark:text-white">
-                  {profile.followerCount || 0}
+                  {profile.followerCount ?? 0}
                 </div>
 
                 <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -192,7 +194,7 @@ const ProfileView = () => {
 
               <div className="text-center">
                 <div className="text-lg font-bold text-gray-900 dark:text-white">
-                  {profile.followingCount || 0}
+                  {profile.followingCount ?? 0}
                 </div>
 
                 <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -202,7 +204,7 @@ const ProfileView = () => {
 
               <div className="text-center">
                 <div className="text-lg font-bold text-gray-900 dark:text-white">
-                  {profile.postCount || 0}
+                  {profile.postCount ?? 0}
                 </div>
 
                 <div className="text-sm text-gray-600 dark:text-gray-400">

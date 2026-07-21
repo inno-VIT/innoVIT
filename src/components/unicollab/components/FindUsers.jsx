@@ -52,6 +52,19 @@ const FindUsers = () => {
     fetchUsers()
   }, [fetchUsers])
 
+  const handleFollowChange = (updatedUser) => {
+    setUsers(prev =>
+      prev.map(user =>
+        user._id === updatedUser._id
+          ? {
+              ...user,
+              ...updatedUser,
+            }
+          : user,
+      ),
+    )
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
@@ -90,7 +103,7 @@ const FindUsers = () => {
       </div>
 
       <div className="p-4">
-                {loading ? (
+        {loading ? (
           <div className="py-10">
             <Loading />
           </div>
@@ -133,13 +146,10 @@ const FindUsers = () => {
                     delay: index * 0.05,
                   }}
                 >
-                  {/* <UserEntry
-                    userId={user._id}
-                    username={user.username}
-                    avatar={user.avatar}
-                    bio={user.bio}
-                  /> */}
-                  <UserEntry user={user} />
+                  <UserEntry
+                    user={user}
+                    onFollowChange={handleFollowChange}
+                  />
                 </motion.div>
               ))}
             </div>
@@ -158,7 +168,6 @@ const FindUsers = () => {
 }
 
 export default FindUsers
-
 
 // < ----------------- Works completely fine, but the code is commented out for now. ----------------- >  
 // import React, { useEffect, useState } from 'react'

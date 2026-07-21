@@ -5,7 +5,7 @@ import { followUser, unfollowUser } from '../../api/users'
 import { useAuth } from '../../../../utils/AuthContext'
 import UserAvatar from './UserAvatar'
 
-const UserEntry = ({ user }) => {
+const UserEntry = ({ user, onFollowChange }) => {
   const { user: currentUser } = useAuth()
 
   if (!user) return null
@@ -29,27 +29,12 @@ const UserEntry = ({ user }) => {
         await unfollowUser(user._id, currentUser)
 
         setIsFollowing(false)
-
-        // Keep local object in sync until parent refreshes
-        user.isFollowing = false
-
-        if (typeof user.followerCount === 'number') {
-          user.followerCount = Math.max(
-            0,
-            user.followerCount - 1,
-          )
-        }
+        onFollowChange?.(user._id, false)
       } else {
         await followUser(user._id, currentUser)
 
         setIsFollowing(true)
-
-        // Keep local object in sync until parent refreshes
-        user.isFollowing = true
-
-        if (typeof user.followerCount === 'number') {
-          user.followerCount += 1
-        }
+        onFollowChange?.(user._id, true)
       }
     } catch (error) {
       console.error('Error following user:', error)
