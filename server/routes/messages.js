@@ -5,7 +5,6 @@ console.log('===== MESSAGE CONTROLLERS =====')
 Object.keys(messageController).forEach(key => {
   console.log(key, typeof messageController[key])
 })
-// const { verifyToken } = require('../middleware/auth')
 const verifyToken = require('../middlewares/isLoggedinMiddleware')
 
 // @route   GET /api/messages/conversations
