@@ -66,7 +66,7 @@ const ProfileView = () => {
 
     const wasFollowing = isFollowing
 
-    // Optimistic UI update
+    
     setIsFollowing(!wasFollowing)
 
     setProfile(prev => ({
