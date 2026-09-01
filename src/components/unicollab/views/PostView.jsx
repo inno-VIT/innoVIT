@@ -75,7 +75,7 @@ const PostView = () => {
       })
     } else {
       navigator.clipboard.writeText(window.location.href)
-      // You could add a toast notification here
+  
       alert('Link copied to clipboard!')
     }
   }
