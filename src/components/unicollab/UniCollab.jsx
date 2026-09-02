@@ -164,7 +164,6 @@ const UniCollab = () => {
   return (
     <div className="mx-auto max-w-6xl space-y-6">
       {/* Welcome Card */}
-
       <Card className="border border-slate-800 bg-[#10141d]">
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
@@ -200,13 +199,11 @@ const UniCollab = () => {
       </Card>
 
       {/* Create Post */}
-
       {isAuthenticated && (
         <CreatePost onPostCreate={handlePostCreated} />
       )}
 
       {/* Feed Tabs */}
-
       <Tabs
         value={activeTab}
         onValueChange={setActiveTab}
